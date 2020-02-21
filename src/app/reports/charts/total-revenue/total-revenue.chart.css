@@ -1,0 +1,14 @@
+
+.revenue-period{
+    padding-left: 30px;
+    font-weight: 400 !important;
+    font-size: 12px !important;
+    color: #212121 !important;
+}
+
+.downloadIcon {
+    /* margin-right: 20px; */
+    position: absolute;
+    right: 0;
+    z-index: 1000;
+}

@@ -1,0 +1,750 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<div id="sponsorship">
+    <div class="px-3 sponsor">
+        <label class="card-title">National Opportunities</label>
+    </div>
+    <div class="row search-container">
+        <div class="col-md-3">
+            <div class="ui-inputgroup">
+                <input #search type="text" pInputText size="25" class="form-control" placeholder="Search">
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="input-group fy-dropdown">
+                <div class="input-group-prepend" style="margin-top: 11px;">
+                    <label class="input-group-text"> Chapter :</label>
+                </div>
+                <p-dropdown [options]="uniqueChapters" appendTo="body" [(ngModel)]="selectedChapter" [style]="{'width':'150px','margin-top':'9px'}" (onChange)="chapterSelection()" placeholder="ALL">
+                </p-dropdown>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <button type="button" class="btn btn-info btn-sm float-right" (click)="addOpportunity()" label="" style="margin-left: 18px;" [disabled]="!manageOpportunities">Add Opportunity</button>
+        </div>
+    </div>
+    <!-- style="padding-right: 24px;padding-left: 24px; padding-top:  0px !important" -->
+    <div class="col-sm-12">
+        <p-dataTable #pipelineDt id="nationalpipelineChild" [rows]="30" [paginator]="false" [responsive]="true" [scrollable]="true" [globalFilter]="search" [value]="filteredOpportunities" expandableRows="true" rowExpandMode="single" (onRowExpand)="filterOpportunity($event)"
+            scrollHeight="450px">
+            <p-column expander="true" styleClass="col-icon" [style]="{'width':'35px'}"></p-column>
+            <p-column field="sponsorName" header="Sponsor" [sortable]="true"></p-column>
+            <p-column field="status" header="Status" [sortable]="true"></p-column>
+            <p-column field="stage" header="Stage" [sortable]="true" [style]="{'width':'165px'}">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    <span style="padding: 4px 14px;
+                   border-radius: 11px;
+                   font-size: 11px;
+                   box-shadow: darkgrey 1px 1px 2px;" [ngStyle]="{backgroundColor:item?.stages?.stageColor}">{{item[col.field]}}</span>
+                </ng-template>
+            </p-column>
+            <p-column field="existingSponsor" header="ES" [sortable]="true"></p-column>
+            <p-column field="createdOn" header="DC" [sortable]="true">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{item[col.field] | date: 'MM/dd/yyyy' }}
+                </ng-template>
+            </p-column>
+            <p-column field="potentionalCoseDate" header="PCD" [sortable]="true">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{item[col.field] | date: 'MM/dd/yyyy' }}
+                </ng-template>
+            </p-column>
+            <p-column field="relationWithNationals" header="RWN" [sortable]="true"></p-column>
+            <p-column field="winningPercentage" header="WP" [sortable]="true">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{item[col.field] + "%"}}
+                </ng-template>
+            </p-column>
+            <p-column field="proposedAmount" header="PA" [sortable]="true">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{item[col.field] | currency}}
+                </ng-template>
+            </p-column>
+            <p-column field="tags" header="Tags" [sortable]="true"></p-column>
+
+            <p-column field="contractTerm" header="Terms" [sortable]="false" [style]="{'width':'55px'}">
+                <ng-template let-col let-item="rowData" let-rowUser="rowData" pTemplate="body">
+                    <img src="../../../assets/images/pipeline-images/view.png" pTooltip="View Contract Terms" style="height: 15px;width: 19px; margin: 5px" (click)="contractTerms(rowUser)" [ngStyle]="{'color':(item.nationalBenefits === 'YES') ? 'blue' : 'red', 'cursor':'pointer'}">
+                </ng-template>
+            </p-column>
+
+            <p-column field="notes" header="Notes" [sortable]="false" [style]="{'width':'85px'}">
+                <ng-template let-col let-item="rowData" let-rowUser="rowData" pTemplate="body">
+                    <img src="../../../assets/images/pipeline-images/add_note.png" style="height: 15px;width: 19px; margin: 5px" (click)="addNotesPopUp(rowUser)" pTooltip="add Notes" [ngClass]="{'disableOpportunity':!manageOpportunities}">
+                    <img src="../../../assets/images/pipeline-images/view_note.png" style="height: 15px;width: 19px; margin: 5px" (click)="ViewNotesPopUp(rowUser)" pTooltip="View Notes" [ngClass]="{'disableOpportunity':viewNationalOpportunities}">
+                </ng-template>
+            </p-column>
+            <p-column field="action" header="Action" [style]="{'width':'90px'}">
+                <ng-template let-col let-item="rowData" let-rowUser="rowData" pTemplate="body">
+
+
+
+
+                    <img src="../../../assets/images/pipeline-images/edit.png" style="height: 15px;width: 19px; margin: 5px" (click)="editOpportunity(rowUser)" pTooltip="Edit" [ngClass]="{'disableOpportunity':!manageOpportunities}">
+                    <img img src="../../../assets/images/pipeline-images/delete.png" style="height: 15px;width: 19px; margin: 5px" (click)="confirmation(rowUser)" pTooltip="delete" [ngClass]="{'disableOpportunity':!deleteOpportunity}">
+                </ng-template>
+            </p-column>
+            <ng-template let-car pTemplate="rowexpansion">
+                <p-tabView>
+                    <p-tabPanel header="Chapter Contacts">
+                        <em-chapter-contacts [chapterContactsInputs]="chapterContactsInputs"></em-chapter-contacts>
+                    </p-tabPanel>
+                    <p-tabPanel header="Sponsor Contacts">
+                        <em-sponsor-contacts [sponsorContactsInputs]="sponsorContactsInputs"></em-sponsor-contacts>
+                    </p-tabPanel>
+                    <p-tabPanel header="National Contacts">
+                        <em-national-contacts [nationalContactsInputs]="nationalContactsInputs"></em-national-contacts>
+                    </p-tabPanel>
+                    <p-tabPanel header="Work Flow">
+                        <em-workflow [workFlowInputs]="workFlowInputs"></em-workflow>
+                    </p-tabPanel>
+                    <p-tabPanel header="Description">
+                        {{description}}
+                    </p-tabPanel>
+                    <p-tabPanel header="Invoice">
+                        {{invoice}}
+                    </p-tabPanel>
+                </p-tabView>
+            </ng-template>
+        </p-dataTable>
+    </div>
+</div>
+
+<div class="px-3 sponsor">
+    <button [disabled]="!export" type="button" class="btn btn-info btn-sm float-right" (click)="exportCSV(pipelineDt)">Export to
+        CSV</button>
+
+    <ul class="list-inline">
+        <li class="list-inline-item legnd"><span class="legnd-head">ES : </span> <span class="legnd-body"> Existing
+                Sponsor</span></li>
+        <li class="list-inline-item legnd"><span class="legnd-head">DC : </span> <span class="legnd-body">Date Created
+            </span></li>
+        <li class="list-inline-item legnd"><span class="legnd-head">PCD : </span> <span class="legnd-body">Potential
+                Close Date </span></li>
+        <li class="list-inline-item legnd"><span class="legnd-head">RWN : </span> <span class="legnd-body">Relationship
+                with Nationals</span></li>
+        <li class="list-inline-item legnd"><span class="legnd-head">WP : </span> <span class="legnd-body">Winning Percentage
+            </span>
+        </li>
+        <li class="list-inline-item legnd"><span class="legnd-head">PA : </span><span class="legnd-body">Proposed
+                Amount</span></li>
+    </ul>
+
+    <p-dialog header={{dialogeHead}} appendTo="body" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" width="1200" [contentStyle]="{'max-height':'350px'}" styleClass="active">
+        <div class="row">
+            <div class="col-md-12" style="text-align: center">
+                <label style="color: #f32e39 !important; align-content: center; font-size: 14px; font-weight: 600">{{errorMessage}}</label>
+            </div>
+        </div>
+        <form #opportunityForm="ngForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="ui-g-12">
+                        <div class="ui-g-6" style="padding-top: 13px;">
+                            <label class="label" for="sponsorName" class="label-required">Sponsor Name:</label>
+                        </div>
+                        <div class="ui-g-6">
+                            <input type="text" class="form-control" [(ngModel)]="model.sponsorName" name="sponsorName" maxlength="500" minlength="1" required #sponsorNameInput="ngModel" />
+                            <div *ngIf="sponsorNameInput.invalid">
+                                <span class="chapter" [hidden]="!sponsorNameInput.touched ">
+                                    <small>{{sponsorNameAlert}}</small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="ui-g-6" style="padding-top: 13px;">
+                            <label class="label" for="status" class="label-required">Sponsor Status</label>
+                        </div>
+                        <div class="ui-g-6">
+                            <select class="custom-select" [(ngModel)]="model.status" name="status" #sponsorStatusInput="ngModel" required>
+                                <option value="open">Open</option>
+                                <option value="Abandoned">Abandoned</option>
+                                <option value="Lost">Lost</option>
+                                <option value="Closed">Closed</option>
+                            </select>
+
+                            <div *ngIf="sponsorStatusInput.invalid">
+                                <span class="chapter" [hidden]="!sponsorStatusInput.touched ">
+                                    <small>{{sponsorstatusAlert}}</small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="ui-g-6" style="padding-top: 13px;">
+                            <label class="label" for="existingSponsor" class="label-required">Existing Sponsor</label>
+                        </div>
+                        <div class="ui-g-6">
+                            <select class="custom-select" [(ngModel)]="model.existingSponsor" name="existingSponsor" #existingSponsorInput="ngModel" required>
+                                <option value="YES">YES</option>
+                                <option value="NO">NO</option>
+                            </select>
+                            <div *ngIf="existingSponsorInput.invalid">
+                                <span class="chapter" [hidden]="!existingSponsorInput.touched ">
+                                    <small>{{existingSponsorAlert}}</small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="ui-g-6" style="padding-top: 13px;">
+                            <label class="label" for="relationWithNationals" class="label-required">Relationship with Nationals</label>
+                        </div>
+                        <div class="ui-g-6">
+                            <select class="custom-select" [(ngModel)]="model.relationWithNationals" name="relationWithNationals" #relationshipWithNationalsInput="ngModel" required>
+                                <option value="NA">NA</option>
+                                <option value="YES">YES</option>
+                                <option value="NO">NO</option>
+                            </select>
+                            <div *ngIf="relationshipWithNationalsInput.invalid">
+                                <span class="chapter" [hidden]="!relationshipWithNationalsInput.touched ">
+                                    <small>Relation with Nationals is required</small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="ui-g-6" style="padding-top: 13px;">
+                            <label class="label" for="nationalConventionSponsor">NC Sponsor</label>
+                        </div>
+                        <div class="ui-g-6">
+                            <select class="custom-select" [(ngModel)]="model.nationalConventionSponsor" name="nationalConventionSponsor" #NCConventionInput="ngModel" required>
+                                <option value="NA">NA</option>
+                                <option value="YES">YES</option>
+                                <option value="NO">NO</option>
+                            </select>
+                            <div *ngIf="NCConventionInput.invalid">
+                                <span class="chapter" [hidden]="!NCConventionInput.touched ">
+                                    <small>NC Sponsor is required</small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="ui-g-6" style="padding-top: 13px;">
+                            <label class="label" for="stages" class="label-required">Stage</label>
+                        </div>
+                        <div class="ui-g-6">
+                            <select class="custom-select" [(ngModel)]="model.stages" name="stages" #stagesInput="ngModel" [compareWith]="compareByID" required>
+                                <option *ngFor="let st of stages; let i = index" [ngValue]="st">{{st.stage}}</option>
+                            </select>
+                            <div *ngIf="stagesInput.invalid">
+                                <span class="chapter" [hidden]="!stagesInput.touched ">
+                                    <small>{{stagesAlert}}</small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="ui-g-6" style="padding-top: 13px;">
+                            <label class="label" for="nationalBenefits" class="label-required">National Benefits</label>
+                        </div>
+                        <div class="ui-g-6">
+                            <select class="custom-select" [(ngModel)]="model.nationalBenefits" name="nationalBenefits" #nationalBenefitsInput="ngModel" required>
+                                <option value="YES">YES</option>
+                                <option value="NO">NO</option>
+                                <option value="NA">NA</option>
+                            </select>
+                            <div *ngIf="nationalBenefitsInput.invalid">
+                                <span class="chapter" [hidden]="!nationalBenefitsInput.touched ">
+                                    <small>National Benefits required</small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12">
+                        <div class="ui-g-6" style="padding-top: 13px;">
+                            <label class="label" for="invoice">Invoice:</label>
+                        </div>
+                        <div class="ui-g-6">
+                            <input type="text" class="form-control" [(ngModel)]="model.invoice" name="invoice" #invoiceInput="ngModel" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="ui-g-12">
+                        <div class="ui-g-6" style="padding-top: 13px;">
+                            <label class="label" for="createdOn">Date Created:</label>
+                        </div>
+                        <div class="ui-g-6">
+                            <p-calendar [(ngModel)]="model.createdOn" name="createdOn" [showIcon]=true></p-calendar>
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="ui-g-6" style="padding-top: 13px;">
+                            <label class="label" for="potentionalCoseDate">Potential Close Date:</label>
+                        </div>
+                        <div class="ui-g-6">
+                            <p-calendar [(ngModel)]="model.potentionalCoseDate" [minDate]="model.createdOn" name="potentionalCoseDate" [showIcon]=true>
+                            </p-calendar>
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="ui-g-6" style="padding-top: 13px;">
+                            <label class="label" for="owner" class="label-required">Owner:</label>
+                        </div>
+                        <div class="ui-g-6">
+                            <input type="text" class="form-control" [(ngModel)]="model.owner" name="owner" required #ownerInput="ngModel" />
+                            <div *ngIf="ownerInput.invalid">
+                                <span class="chapter" [hidden]="!ownerInput.touched ">
+                                    <small>{{ownerAlert}}</small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="ui-g-6" style="padding-top: 13px;">
+                            <label class="label" for="winningPercentage">Winning Percentage (%):</label>
+                        </div>
+                        <div class="ui-g-6">
+                            <input type="number" class="form-control" [(ngModel)]="model.winningPercentage" name="winningPercentage" maxlength="40" #winningPercentageInput="ngModel" />
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="ui-g-6" style="padding-top: 13px;">
+                            <label class="label" for="proposedAmount">Proposed Amount ($) : </label>
+                        </div>
+                        <div class="ui-g-6">
+                            <input type="number" class="form-control" [(ngModel)]="model.proposedAmount" name="proposedAmount" maxlength="20" #proposedAmountInput="ngModel" />
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="ui-g-6" style="padding-top: 13px;">
+                            <label class="label" for="description" class="label-required">Description:</label>
+                        </div>
+                        <div class="ui-g-6">
+                            <input type="textarea" class="form-control" [(ngModel)]="model.description" name="description" maxlength="100" required #descriptionInput="ngModel" />
+                            <div *ngIf="descriptionInput.invalid">
+                                <span class="chapter" [hidden]="!descriptionInput.touched ">
+                                    <small>{{descriptionAlert}}</small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="ui-g-6" style="padding-top: 13px;">
+                            <label class="label" for="membershipProposed">Membership Proposed:</label>
+                        </div>
+                        <div class="ui-g-6">
+                            <input type="text" class="form-control" [(ngModel)]="model.membershipProposed" name="membershipProposed" maxlength="100" #membershipProposedInput="ngModel" />
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="ui-g-6" style="padding-top: 13px;">
+                            <label class="label" for="tags">Tags:</label>
+                        </div>
+                        <div class="ui-g-6">
+                            <input type="text" class="form-control" [(ngModel)]="model.tags" name="tags" #tagsInput="ngModel" />
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="ui-g-6" style="padding-top: 13px;">
+                            <label class="label" for="primaryGroupCode" class="label-required">Chapter Code</label>
+                        </div>
+                        <div class="ui-g-6">
+                            <input type="text" class="form-control" [(ngModel)]="model.primaryGroupCode" name="primaryGroupCode" maxlength="10" #primaryGroupCodeInput="ngModel" required />
+                            <div *ngIf="primaryGroupCodeInput.invalid">
+                                <span class="chapter" [hidden]="!primaryGroupCodeInput.touched ">
+                                    <small>{{primaryGroupCodeAlert}}</small>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="ui-g-12" style="padding: 20px !important;">
+                    <label class="label" for="chapterContacts">Chapter Contacts:</label>
+                    <button class="btn btn-success btn-sm" style="margin-left: 30px;width: 68px !important; height:30px !important; float :right" (click)="addChapterContacts()"> +Add</button>
+                    <p-table [value]="chapterContacts" id="nationalChapterContacts-edit">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Full Name</th>
+                                <th>Chapter Role</th>
+                                <th>Company</th>
+                                <th>Company Role</th>
+                                <th>Email</th>
+                                <th>Phone#</th>
+                                <th style="width: 30px !important"></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+                            <tr>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" name="fullName" [(ngModel)]="rowData.fullName">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.fullName}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" name="role" [(ngModel)]="rowData.role">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.role}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" name="company" [(ngModel)]="rowData.company">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.company}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" name="companyRole" [(ngModel)]="rowData.companyRole">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.companyRole}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" name="email" [(ngModel)]="rowData.email">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.email}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" name="phone" [(ngModel)]="rowData.phone">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.phone}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td style="text-align:center" style="width: 30px !important">
+                                    <i class="fa fa-trash-o buttonStyle" (click)="onRowRemoveChapterContact(ri)"></i>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+
+                <div class="ui-g-12" style="padding: 20px !important;">
+                    <label class="label" for="sponsorContacts">Sponsor Contacts</label>
+                    <button class="btn btn-success btn-sm" style="margin-left: 30px;width: 68px !important; height:30px !important ; float : right !important" (click)="addSponsorContacts()"> +Add</button>
+                    <p-table [value]="sponsorContacts" id="nationalChapterContacts-edit">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Contact Name</th>
+                                <th>Company Role</th>
+                                <th>Email</th>
+                                <th>Phone#</th>
+                                <th>Other</th>
+                                <th style="width: 30px !important"></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+                            <tr>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" name="fullName" [(ngModel)]="rowData.fullName">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.fullName}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" name="role" [(ngModel)]="rowData.role">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.role}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" name="email" [(ngModel)]="rowData.email">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.email}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" name="phone" [(ngModel)]="rowData.phone">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.phone}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" name="other" [(ngModel)]="rowData.other">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.other}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td style="text-align:center" style="width: 30px !important">
+                                    <i class="fa fa-trash-o buttonStyle" (click)="onRowRemoveSponsorContact(ri)"></i>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <div class="ui-g-12" style="padding: 20px !important;">
+                    <label class="label" for="nationalContacts">National Contacts</label>
+                    <button class="btn btn-success btn-sm" style="margin-left: 30px;width: 68px !important; height:30px !important; float:right !important" (click)="addNationalContacts()"> +Add</button>
+                    <p-table [value]="nationalContacts" id="nationalChapterContacts-edit">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Contact Name</th>
+                                <th>Role</th>
+                                <th>Email</th>
+                                <th>Phone#</th>
+                                <th>Other</th>
+                                <th style="width: 30px !important"></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData>
+                            <tr>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" name="fullName" [(ngModel)]="rowData.fullName">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.fullName}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" name="role" [(ngModel)]="rowData.role">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.role}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" name="company" [(ngModel)]="rowData.email">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.email}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" name="companyRole" [(ngModel)]="rowData.phone">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.phone}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" name="phone" [(ngModel)]="rowData.other">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.other}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td style="text-align:center" style="width: 30px !important">
+                                    <i class="fa fa-trash-o buttonStyle" (click)="onRowRemoveNationalContact(ri)"></i>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+
+                <input type="text" name="followUps" hidden [(ngModel)]="model.followUps" />
+                <div class="ui-g-12" style="padding-left: 20px !important;">
+                    <label class="label" for="proposedContractTerms">Proposed Contract terms:</label>
+                </div>
+
+                <div class="ui-g-12" style="padding: 20px !important;">
+                    <div class="ui-g-12">
+                        <p-editor id="national-proposed-contract-terms" [(ngModel)]="model.proposedContractTerms" name="proposedContractTerms" (onTextChange)="checkLengthOfCharacters($event)" [style]="{'height':'320px'}">
+                        </p-editor>
+                    </div>
+                    <div>
+                        <span class="chapter">
+                            <small>{{ pcTermsLengthError}}</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <p-footer>
+
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" class="btn btn-info btn-sm float-right" *ngIf="updateButton" [disabled]="!enable || !opportunityForm.valid" (click)="updateOpportunity(opportunityForm.value)">Update Opportunity</button>
+                <button type="button" class="btn btn-info float-right btn-sm" *ngIf="addButton" [disabled]="!enable || !opportunityForm.valid" (click)="saveOpportunity(opportunityForm.value)">Save
+                    Opportunity</button>
+            </div>
+        </p-footer>
+    </p-dialog>
+    <p-confirmDialog header={{confirmHead}} appendTo="body" icon="pi pi-exclamation-triangle" width="425">
+    </p-confirmDialog>
+
+    <!-- Add Notes to Opportunity -->
+    <p-dialog header={{notesDialogeHead}} appendTo="body" [(visible)]="displayNotesDialog" [responsive]="true" showEffect="fade" [modal]="true" width="1100" [contentStyle]="{'max-height':'350px'}" styleClass="active">
+        <div class="row">
+            <div class="col-md-12" style="text-align: center">
+                <label style="color: #f32e39 !important; align-content: center; font-size: 14px; font-weight: 600">{{errorMessage}}</label>
+            </div>
+        </div>
+        <form #notesForm="ngForm">
+            <div class="row">
+                <div class="ui-g-12">
+                    <div class="ui-g-4">
+                        <div class="ui-g-4" style="padding-top: 13px;">
+                            <label class="label" style="font-size:15px;" for="followUpDate"> Date:</label>
+                        </div>
+                        <div class="ui-g-8" style="margin-left:-70px;">
+                            <p-calendar [(ngModel)]="notes.followUpDate" name="followUpDate" [showIcon]=true>
+                            </p-calendar>
+                        </div>
+                    </div>
+                    <div class="ui-g-4" style="margin-left:-10px;">
+                        <div class="ui-g-4" style="padding-top: 13px;">
+                            <label class="label" for="personName" style="margin-left:-19px;font-size:15px;">Person Name:</label>
+                        </div>
+                        <div class="ui-g-8" style="margin-left:-30px;">
+                            <input type="text" class="form-control" [(ngModel)]="notes.personName" name="personName" maxlength="40" required #personNameInput="ngModel" />
+                            <div *ngIf="personNameInput.invalid">
+                                <span class="chapter" [hidden]="!personNameInput.touched ">
+                                    <small>{{personNameAlert}}</small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-4">
+                        <div class="ui-g-4" style="padding-top: 13px;">
+                            <label class="label" style="font-size:15px;" for="notes">Stages</label>
+                        </div>
+                        <div class="ui-g-8" style="margin-left:-60px;">
+                            <select class="custom-select" [(ngModel)]="notes.stages" name="stages" #stagesInputNotes="ngModel" [compareWith]="compareNotesByID" required>
+                                <option selected disabled> </option>
+                                <option *ngFor="let st of stages; let i = index" [ngValue]="st">{{st.stage}}</option>
+                            </select>
+                            <div *ngIf="stagesInputNotes.invalid">
+                                <span class="chapter" [hidden]="!stagesInputNotes.touched ">
+                                    <small>{{stagesAlert}}</small>natio
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <p-editor id="notes-proposed-contract-terms" [(ngModel)]="notes.notes" name="notes" [style]="{'height':'320px'}">
+                        </p-editor>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" class="btn btn-info float-right btn-sm" [disabled]="!notesForm.valid" (click)="addNotesDetails(notesForm.value)">Add
+                    Note</button>
+            </div>
+        </p-footer>
+    </p-dialog>
+
+    <p-dialog header={{viewNotesDialogeHead}} appendTo="body" [(visible)]="viewdisplayNotesDialog" [responsive]="true" showEffect="fade" [modal]="true" width="1200" [contentStyle]="{'max-height':'350px'}" styleClass="active">
+        <div #nDiv>
+            <div *ngFor="let note of followUps">
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <div style="font-weight:400 !important;font-size: 14px;">Date</div> <br>
+                        <!-- <div style="font-weight:500;">Notes</div> -->
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="card" style="text-align:left;">{{note.followUpDate | date: 'MM/dd/yyyy'}}</div>
+
+                    </div>
+                    <div class="col-md-8"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2">
+
+                        <div style="font-weight:400 !important;font-size: 14px;">Person Name</div><br>
+
+                        <!-- <div style="font-weight:500;">Notes</div> -->
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <div class="card" style="text-align:left;">{{note.personName}}</div>
+
+                    </div>
+                    <div class="col-md-8"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+
+                        <div style="font-weight:400 !important;font-size: 14px;">Notes added by</div> <br>
+                        <!-- <div style="font-weight:500;">Notes</div> -->
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <div class="card" style="text-align:left;">{{note.updatedBy}}</div>
+                    </div>
+                    <div class="col-md-8"></div>
+                </div>
+
+                <div class="row">
+                    <div style="font-weight:400 !important;font-size: 14px; margin: 11px -51px 0px 19px;">Notes</div>
+
+                    <div class="col-md-10 offset-2">
+                        <span style="font-size: 14px;font-weight: 400;width:80%;" class="card custom" [innerHTML]="note.notes"></span>
+                    </div>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class="footer-bar">
+            <i class="fa fa-print float-lg-right" (click)="printNotes(nDiv)" style="font-size: 1.7em">&nbsp;</i>
+            <i class="fa fa-copy float-lg-right" (click)="copyNotes(nDiv)" style="font-size: 1.7em">&nbsp;</i>
+        </div>
+    </p-dialog>
+    <p-dialog header="Ascend : Proposed Contract Terms  for {{opportunityName}}" appendToBody="true" [(visible)]="terms" [responsive]="true" showEffect="fade" [modal]="true" width="550" styleClass="memberDailog" id="sTerms">
+        <div class="contract-terms-custom" [innerHtml]="termData" #tDiv></div>
+        <div class="footer-bar">
+            <i class="fa fa-print float-lg-right" (click)="printTerms(tDiv)" style="font-size: 1.7em">&nbsp;</i>
+            <i class="fa fa-copy float-lg-right" (click)="copyTerms(tDiv)" style="font-size: 1.7em">&nbsp;</i>
+        </div>
+    </p-dialog>

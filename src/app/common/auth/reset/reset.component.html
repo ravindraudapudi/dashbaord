@@ -1,0 +1,56 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<div class="container  mt-8  pb-5">
+  <img src="/assets/images/eMembler_Logo.png" width="200px" style="margin: 3% 0% 0% 3%;">
+  <form [formGroup]="resetPasswordForm">
+    <div class="panel">
+      <div class="panel-header panel-right">
+        <p style="margin-bottom: 0rem"> RESET YOUR PASSWORD </p>
+      </div>
+      <div class="panel-body panel-right">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <!-- <span class="input-group-text"></span> -->
+          </div>
+          <input type="password" [pKeyFilter]="noSpace" formControlName="oldPassword" class="form-control" placeholder="Current Password" maxlength="20"/>
+          <!-- <i class="fa fa-eye field-icon" aria-hidden="true"></i> -->
+        </div>
+        <span class="error-danger"><small>{{oldPasswordAlert}}</small></span>
+
+
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <!-- <span class="input-group-text"></span> -->
+          </div>
+          <input type="password" [pKeyFilter]="noSpace" formControlName="newPassword" class="form-control" placeholder="New Password" maxlength="20"/>
+          <!-- <i class="fa fa-eye field-icon" aria-hidden="true"></i>           -->
+        </div>
+        <span class="error-danger"><small>{{newPasswordAlert}}</small></span>
+
+
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <!-- <span class="input-group-text"></span> -->
+          </div>
+          <input type="password" [pKeyFilter]="noSpace"  formControlName="confirmPassword" class="form-control" placeholder="Confirm Password" maxlength="20"/>
+          <!-- <i class="fa fa-eye field-icon" aria-hidden="true"></i> -->
+        </div>
+        <span class="error-danger"><small>{{confirmPasswordAlert}}</small></span>
+        <span class="error-danger" *ngIf="mismatch">
+          <small>password missmatch</small>
+        </span>
+      </div>
+      <hr>
+      <div class="panel-footer" style="padding-left: 3%;">
+        <div class="form-row">
+          <div class="col">
+            <button type="button" class="btn btn-info float-left btn-sm" [disabled]="!resetPasswordForm.valid" (click)="reset(resetPasswordForm.value)">Reset
+            </button>&nbsp;
+            <button type="button" class="btn btn-info float-left btn-sm" (click)="loginBack()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+

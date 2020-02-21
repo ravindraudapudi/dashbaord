@@ -1,0 +1,69 @@
+<p-dataTable #dt id="TR"  [value]="dataForTable" [rows]="30" [paginator]="false"
+        [responsive]="true">
+        <p-column field="chapterName" header="{{revenueDetails.headers.chapterName}}" [sortable]="true" sortField="chapterName">
+            <ng-template let-col let-item="rowData" pTemplate="body" style="cursor: pointer;">
+                {{ item[col.field] | titlecase }}
+            </ng-template>
+        </p-column>
+        <p-column field="period1" header="{{revenueDetails.headers.period1}}" [sortable]="true" sortField="period1">
+            <ng-template let-col let-item="rowData" pTemplate="body" style="cursor: pointer;">
+                {{ item[col.field] | currency }}
+            </ng-template>
+        </p-column>
+        <p-column field="period2" header="{{revenueDetails.headers.period2}}" [sortable]="true" sortField="period2">
+            <ng-template let-col let-item="rowData" pTemplate="body" style="cursor: pointer;">
+                {{ item[col.field] | currency }}
+            </ng-template>
+        </p-column>
+        <p-column field="goal" header="{{revenueDetails.headers.goal}}" [sortable]="true" sortField="goal">
+            <ng-template let-col let-item="rowData" pTemplate="body" style="cursor: pointer;">
+                {{ item[col.field] | currency}}
+            </ng-template>
+        </p-column>
+        <p-column field="actual" header="{{revenueDetails.headers.actual}}" [sortable]="true" sortField="actual">
+            <ng-template let-col let-item="rowData" pTemplate="body" style="cursor: pointer;">
+                {{ item[col.field] | currency}}
+            </ng-template>
+        </p-column>
+        <p-column field="percentage" header="{{revenueDetails.headers.percentage}}" [sortable]="true" sortField="percentage">
+            <ng-template let-col let-item="rowData" pTemplate="body" style="cursor: pointer;">
+                {{ item[col.field]  }}  %
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+
+    <p-dataTable #dtt id="TRS"  [value]="totalValue" [rows]="30" [paginator]="false"
+        [responsive]="true">
+        <p-column field="chapterName"  sortField="chapterName">
+            <ng-template let-col let-item="rowData" pTemplate="body" >
+                {{ item[col.field] | titlecase }}
+            </ng-template>
+        </p-column>
+        <p-column field="period1"  sortField="period1">
+            <ng-template let-col let-item="rowData" pTemplate="body" >
+                {{ item[col.field] | currency }}
+            </ng-template>
+        </p-column>
+        <p-column field="period2"  sortField="period2">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{ item[col.field] | currency }}
+            </ng-template>
+        </p-column>
+        <p-column field="goal" sortField="goal">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{ item[col.field] | currency}}
+            </ng-template>
+        </p-column>
+        <p-column field="actual"  sortField="actual">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{ item[col.field] | currency}}
+            </ng-template>
+        </p-column>
+        <p-column field="percentage"  sortField="percentage">
+            <ng-template let-col let-item="rowData" pTemplate="body" style="cursor: pointer;">
+                {{ item[col.field]  }}  %
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+    
+<button *ngIf="export" type="button" class="btn btn-info btn-sm float-right" (click)="exportCSV(dt)">Export to CSV</button>

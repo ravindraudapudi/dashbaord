@@ -1,0 +1,490 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<div id="sponsorship">
+    <div class="px-3 sponsor">
+        <label class="card-title">Sponsorship Report for {{selectedChapter | titlecase}}</label>
+    </div>
+
+    <!-- Searching Feature -->
+    <div class="row search-container">
+        <div class="col-md-3">
+            <div class="ui-inputgroup">
+                <input #search type="text" pInputText size="25" class="form-control" placeholder="Search">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group fy-dropdown">
+                <div class="input-group-prepend" style="margin-top: 11px;">
+
+                    <label class="input-group-text">Accounting Year :</label>
+                </div>
+                <p-dropdown [options]="uniqueParteshipYear" appendTo="body" [(ngModel)]="selectedValue" [style]="{'width':'150px','margin-top':'9px'}" (onChange)="partnershipYearSelection()" placeholder="ALL">
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <button type="button" class="btn btn-info btn-sm float-right" (click)="addSponsor()" label="" style="margin-left: 18px;" [disabled]='!updateSponsor'>Add Sponsor</button>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <p-dataTable #dt [globalFilter]="search" id="sponsorChild" [value]="filteredsponsorshipData" [rows]="30" [paginator]="false" [responsive]="true" [scrollable]="true" scrollHeight="350px">
+            <p-column field="sponsor" header="Sponsor" [sortable]="true">
+                <ng-template let-col let-item="rowData" pTemplate="body" style="cursor: pointer;">
+                    {{ item[col.field] }}
+                </ng-template>
+            </p-column>
+            <p-column field="amount" header="Amount" [sortable]="true" class="amount">
+                <ng-template let-col let-item="rowData" pTemplate="body" style="cursor: pointer;">
+                    {{ item[col.field] | currency }}
+                </ng-template>
+            </p-column>
+            <p-column field="invoiceNumber" header="Invoice" [sortable]="true">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{item[col.field] }}
+                </ng-template>
+            </p-column>
+            <p-column field="invoiceDate" header="ID" [sortable]="true">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{item[col.field] | date: 'M/d/yyyy' }}
+                </ng-template>
+            </p-column>
+            <p-column field="aggrementEndDate" header="AED" [sortable]="true">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{ item[col.field] | date: 'M/d/yyyy'}}
+                </ng-template>
+            </p-column>
+            <p-column field="partenershipYear" header="AY" [sortable]="true" [style]="{'width':'65px'}">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{ item[col.field] }}
+                </ng-template>
+            </p-column>
+            <p-column field="discountCode" header="MC" [sortable]="true">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    <span style="cursor:pointer;" pTooltip="Chapter Contact:{{item.crm}} &#13;&#10; Sponsor Contact:{{item.sponserContact}}" tooltipPosition="top">
+                        {{ item[col.field] }}
+                    </span>
+                </ng-template>
+            </p-column>
+            <p-column field="issued" header="MI" [sortable]="true" [style]="{'width':'55px'}">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{ item[col.field] }}
+                </ng-template>
+            </p-column>
+            <p-column field="redeemed" header="MR" [sortable]="true" [style]="{'width':'55px'}">
+                <ng-template let-col let-item="rowData" let-rowUser="rowData" pTemplate="body">
+                    <span (click)="redeemedSponsorship(rowUser)" style="cursor:pointer">{{ item[col.field] }}</span>
+                </ng-template>
+            </p-column>
+            <p-column field="unused" header="MU" [sortable]="true" [style]="{'width':'55px'}">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{ item[col.field] }}
+                </ng-template>
+            </p-column>
+            <p-column field="expirationDate" header="CED" [sortable]="true">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{ item[col.field] | date: 'M/d/yyyy' }}
+                </ng-template>
+            </p-column>
+            <p-column field="contractTerm" header="Terms" [sortable]="false" [style]="{'width':'55px'}">
+                <ng-template let-col let-item="rowData" let-rowUser="rowData" pTemplate="body">
+                    <i class="fa fa-1x fa-plus" (click)="contractTerms(rowUser)" [ngStyle]="{'color':(item.nationalBenefit === 'YES') ? 'blue' : 'red', 'cursor':'pointer'}">
+                    </i>
+                </ng-template>
+            </p-column>
+            <p-column field="action" header="Action" [style]="{'width':'90px'}">
+                <ng-template let-col let-item="rowData" let-rowUser="rowData" pTemplate="body">
+                    <img src="../../../assets/images/pipeline-images/edit.png" style="height: 15px;width: 19px; margin: 5px" (click)="editSponsor(rowUser)" pTooltip="Edit" [ngClass]="{'disableSponsor':!updateSponsor}">
+                    <img img src="../../../assets/images/pipeline-images/delete.png" style="height: 15px;width: 19px; margin: 5px" (click)="confirmation(rowUser)" pTooltip="delete" [ngClass]="{'disableSponsor':!updateSponsor}">
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <table class="table table-bordered custom-table" *ngIf="calculatedSponsor">
+        <tbody>
+            <tr style="background: #ffff">
+                <td style="width: 100px">Total</td>
+                <td>{{calculatedSponsor.totalTemp | currency}}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{calculatedSponsor.issuedTotalTemp}}</td>
+                <td>{{calculatedSponsor.redeemedTotalTemp}}</td>
+                <td>{{calculatedSponsor.unUsedTotalTemp}}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="row">
+    <ul>
+        <li class="list-inline-item legnd"><span class="legnd-head">ID : </span> <span class="legnd-body">Invoice Date
+            </span></li>
+        <li class="list-inline-item legnd"><span class="legnd-head">AED : </span> <span class="legnd-body">Agreement End
+                Date</span></li>
+        <li class="list-inline-item legnd"><span class="legnd-head">AY : </span> <span class="legnd-body">Accounting
+                Year</span></li>
+        <li class="list-inline-item legnd"><span class="legnd-head">MC : </span> <span class="legnd-body">Membership
+                Code
+            </span>
+        </li>
+        <li class="list-inline-item legnd"><span class="legnd-head">MI : </span><span class="legnd-body">Membership
+                Issued</span></li>
+        <li class="list-inline-item legnd"><span class="legnd-head">MR : </span><span class="legnd-body">Membership
+                Redeemed</span></li>
+        <li class="list-inline-item legnd"><span class="legnd-head">MU : </span><span class="legnd-body">Membership
+                Unused</span></li>
+        <li class="list-inline-item legnd"><span class="legnd-head">CED : </span><span class="legnd-body">Code
+                Expiration Date</span></li>
+    </ul>
+</div>
+
+<div class="px-3 sponsor">
+    <button *ngIf="export" type="button" class="btn btn-info btn-sm float-right" (click)="exportCSV(dt)">Export to
+        CSV</button>
+</div>
+<div id="redeem" *ngIf="redeemedMembers">
+    <div class="px-3 mt-3 sponsor">
+        <label class="card-title"> Membership Redeemption for {{reedemedTitle}} </label>
+    </div>
+    <div class="col-sm-12">
+        <p-dataTable #dc id="redeemTable" [globalFilter]="search" [value]="redeemedMembership" [rows]="10" [paginator]="false" [responsive]="true" [scrollable]="true" scrollHeight="200px">
+            <p-column field="primaryGroupCode" header="Chapter Code" [sortable]="true">
+                <ng-template let-col let-item="rowData" pTemplate="body" style="cursor: pointer;">
+                    {{ item[col.field] }}
+                </ng-template>
+            </p-column>
+            <p-column field="firstName" header="First Name" [sortable]="true">
+                <ng-template let-col let-item="rowData" pTemplate="body" style="cursor: pointer;">
+                    {{ item[col.field] | titlecase }}
+                </ng-template>
+            </p-column>
+            <p-column field="lastName" header="Last Name" [sortable]="true">
+                <ng-template let-col let-item="rowData" pTemplate="body" style="cursor: pointer;">
+                    {{ item[col.field] | titlecase }}
+                </ng-template>
+            </p-column>
+            <p-column field="email" header="Email" [sortable]="true">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{item[col.field]}}
+                </ng-template>
+            </p-column>
+            <p-column field="company" header="Company" [sortable]="true">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{ item[col.field] }}
+                </ng-template>
+            </p-column>
+            <p-column field="status" header="Status" [sortable]="true" sortField="status">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    <span [ngStyle]="{ 'color':(item[col.field] === true || item[col.field] === 'ACTIVE'? 'green' : ( item[col.field] === false || item[col.field] === 'EXPIRED'?  'red' : 'blue')), 
+            'font-weight':'800'
+            }">
+                        {{ item[col.field] }}
+                    </span>
+                </ng-template>
+            </p-column>
+            <p-column field="dateProcessed" header="Processed Date" [sortable]="true">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{ item[col.field] | date: 'M/d/yyyy' }}
+                </ng-template>
+            </p-column>
+            <p-column field="expiryDate" header="Expiration Date" [sortable]="true">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{ item[col.field] | date: 'M/d/yyyy' }}
+                </ng-template>
+            </p-column>
+            <p-column field="memberSince" header="Sign-in Date" [sortable]="false">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{ item[col.field] | date: 'M/d/yyyy' }}
+                </ng-template>
+            </p-column>
+            <p-column field="emailBounced" header="Email Bounced?" [sortable]="false">
+                <ng-template let-col let-item="rowData" let-rowUser="rowData" pTemplate="body">
+                    <span (click)="redeemedSponsorship(rowUser)">{{ item[col.field] }}</span>
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+    </div>
+    <div class="sponsor" style="justify-content: flex-end">
+        <button style="margin: 20px" type="button" class="btn btn-info btn-sm float-right " (click)="exportReddemedCSV(dc)">Export
+            to
+            CSV</button>
+    </div>
+</div>
+<p-dialog header={{dialogeHead}} appendTo="body" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" width="1200" [contentStyle]="{'max-height':'350px'}" styleClass="active">
+
+    <div class="row">
+        <div class="col-md-12" style="text-align: center">
+            <label style="color: #f32e39 !important; align-content: center; font-size: 14px; font-weight: 600">{{errorMessage}}</label>
+        </div>
+    </div>
+
+
+    <!-- add and edit sponsor window -->
+    <form #sponsorForm="ngForm">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="ui-g-12">
+                    <div class="ui-g-6" style="padding-top: 13px;">
+                        <label class="label" for="sponsor" class="label-required">Sponsor Name:</label>
+                    </div>
+                    <div class="ui-g-6">
+                        <input type="text" class="form-control" [(ngModel)]="model.sponsor" name="sponsor" maxlength="500" minlength="1" required #sponsorNameInput="ngModel" />
+                        <div *ngIf="sponsorNameInput.invalid">
+                            <span class="chapter" [hidden]="!sponsorNameInput.touched ">
+                                <small>Sponsor required</small>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-g-12">
+                    <div class="ui-g-6" style="padding-top: 13px;">
+                        <label class="label" for="amount" class="label-required"> Amount:</label>
+                    </div>
+                    <div class="ui-g-6">
+                        <input type="number" class="form-control" [(ngModel)]="model.amount" name="amount" maxlength="40" required #amountInput="ngModel" />
+                        <div *ngIf="amountInput.invalid">
+                            <span class="chapter" [hidden]="!amountInput.touched ">
+                                <small>Amount required</small>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-g-12">
+                    <div class="ui-g-6" style="padding-top: 13px;">
+                        <label class="label" for="invoiceNumber" class="label-required">Invoice Number:</label>
+                    </div>
+                    <div class="ui-g-6">
+                        <input type="text" class="form-control" [(ngModel)]="model.invoiceNumber" name="invoiceNumber" maxlength="40" minlength="1" required #invoiceNumberInput="ngModel" />
+                        <div *ngIf="invoiceNumberInput.invalid">
+                            <span class="chapter" [hidden]="!invoiceNumberInput.touched ">
+                                <small>Invoice Number required</small>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-g-12">
+                    <div class="ui-g-6" style="padding-top: 13px;">
+                        <label class="label" for="nationalBenefit" class="label-required">National Benefits</label>
+                    </div>
+                    <div class="ui-g-6">
+                        <select class="custom-select" [(ngModel)]="model.nationalBenefit" name="nationalBenefit" #nationalBenefitsInput="ngModel" required>
+                            <option value="YES">YES</option>
+                            <option value="NO">NO</option>
+                            <option value="NA">NA</option>
+                        </select>
+                        <div *ngIf="nationalBenefitsInput.invalid">
+                            <span class="chapter" [hidden]="!nationalBenefitsInput.touched ">
+                                <small>National Benefits is required</small>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-g-12">
+                    <div class="ui-g-6" style="padding-top: 13px;">
+                        <label class="label" for="relationWithNational" class="label-required">Relationship with Nationals</label>
+                    </div>
+                    <div class="ui-g-6">
+                        <select class="custom-select" [(ngModel)]="model.relationWithNational" name="relationWithNational" #relationshipWithNationalsInput="ngModel" required>
+                            <option value="YES">YES</option>
+                            <option value="NO">NO</option>
+                            <option value="NA">NA</option>
+                        </select>
+                        <div *ngIf="relationshipWithNationalsInput.invalid">
+                            <span class="chapter" [hidden]="!relationshipWithNationalsInput.touched ">
+                                <small>Relationship with Nationals is required</small>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-g-12">
+                    <div class="ui-g-6" style="padding-top: 13px;">
+                        <label class="label" for="partenershipYear" class="label-required">Partnership Year:</label>
+                    </div>
+                    <div class="ui-g-6">
+                        <input type="number" class="form-control" [(ngModel)]="model.partenershipYear" name="partenershipYear" maxlength='4' #partenershipYearInput="ngModel" required />
+                        <div *ngIf="partenershipYearInput.invalid">
+                            <span class="chapter" [hidden]="!partenershipYearInput.touched ">
+                                <small>Partenership Year required</small>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-g-12">
+                    <div class="ui-g-6" style="padding-top: 13px;">
+                        <label class="calendar-control-label" for="invoiceDate">Invoice Date:</label>
+                    </div>
+                    <div class="ui-g-6">
+                        <p-calendar [(ngModel)]="model.invoiceDate" name="invoiceDate" [showIcon]=true></p-calendar>
+                    </div>
+                </div>
+
+                <div class="ui-g-12">
+                    <div class="ui-g-6" style="padding-top: 13px;">
+                        <label class="calendar-control-label" for="aggrementEndDate">Aggrement End Date:</label>
+                    </div>
+                    <div class="ui-g-6">
+                        <p-calendar [(ngModel)]="model.aggrementEndDate" name="aggrementEndDate" [showIcon]=true>
+                        </p-calendar>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="ui-g-12">
+                    <div class="ui-g-6" style="padding-top: 13px;">
+                        <label class="label" for="primaryGroupCode" class="label-required">Chapter Code</label>
+                    </div>
+                    <div class="ui-g-6">
+                        <input type="text" class="form-control" [(ngModel)]="model.primaryGroupCode" name="primaryGroupCode" maxlength="10" #primaryGroupCodeInput="ngModel" required />
+                        <div *ngIf="primaryGroupCodeInput.invalid">
+                            <span class="chapter" [hidden]="!primaryGroupCodeInput.touched ">
+                                <small>Chapter code required ex:NTX</small>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-g-12">
+                    <div class="ui-g-6" style="padding-top: 13px;">
+                        <label class="calendar-control-label" for="expirationDate">Expiration Date:</label>
+                    </div>
+                    <div class="ui-g-6">
+                        <p-calendar [(ngModel)]="model.expirationDate" name="expirationDate" [showIcon]=true>
+                        </p-calendar>
+                    </div>
+                </div>
+                <div class="ui-g-12">
+                    <div class="ui-g-6" style="padding-top: 13px;">
+                        <label class="label" for="discountCode" class="label-required">Membership code:</label>
+                    </div>
+                    <div class="ui-g-6">
+                        <input type="text" class="form-control" [(ngModel)]="model.discountCode" name="discountCode" maxlength='100' #discountCodeInput="ngModel" required />
+                        <div *ngIf="discountCodeInput.invalid">
+                            <span class="chapter" [hidden]="!discountCodeInput.touched ">
+                                <small>Membership code required</small>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-g-12">
+                    <div class="ui-g-6" style="padding-top: 13px;">
+                        <label class="label" for="sponserLevel" class="label-required">Source</label>
+                    </div>
+                    <div class="ui-g-6">
+                        <select class="custom-select" [(ngModel)]="model.sponserLevel" name="sponserLevel" #sponserLevelInput="ngModel" required>
+                            <option value="CHAPTER">CHAPTER</option>
+                            <option value="NATIONAL">NATIONAL</option>
+                        </select>
+                        <div *ngIf="sponserLevelInput.invalid">
+                            <span class="chapter" [hidden]="!sponserLevelInput.touched ">
+                                <small>Source is required</small>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-g-12">
+                    <div class="ui-g-6" style="padding-top: 13px;">
+                        <label class="label" for="type" class="label-required">Type</label>
+                    </div>
+                    <div class="ui-g-6">
+                        <select class="custom-select" [(ngModel)]="model.type" name="type" #typeInput="ngModel" required>
+                            <option value="SPONSOR" selected="selected">SPONSOR</option>
+                            <option value="MEMBER">MEMBER</option>
+                        </select>
+                        <div *ngIf="typeInput.invalid">
+                            <span class="chapter" [hidden]="!typeInput.touched ">
+                                <small>Type is required</small>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="ui-g-12">
+                    <div class="ui-g-6" style="padding-top: 13px;">
+                        <label class="label" for="issued" class="label-required">Membership Issued: </label>
+                    </div>
+                    <div class="ui-g-6">
+                        <input type="number" class="form-control" [pKeyFilter]="numberExp" [(ngModel)]="model.issued" name="issued" maxlength='10' #membershipIssuedInput="ngModel" required />
+                        <div *ngIf="membershipIssuedInput.invalid">
+                            <span class="chapter" [hidden]="!membershipIssuedInput.touched ">
+                                <small>Membership Issued required</small>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-g-12">
+                    <div class="ui-g-6" style="padding-top: 13px;">
+                        <label class="label" for="crm" class="label-required">Chapter Contact:</label>
+                    </div>
+                    <div class="ui-g-6">
+                        <input type="text" class="form-control" [(ngModel)]="model.crm" name="crm" maxlength='100' #chapterContactInput="ngModel" required />
+                        <div *ngIf="chapterContactInput.invalid">
+                            <span class="chapter" [hidden]="!chapterContactInput.touched ">
+                                <small>Chapter Contact required</small>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-g-12">
+                    <div class="ui-g-6" style="padding-top: 13px;">
+                        <label class="label" for="chapterContact" class="label-required">Sponsor Contact:</label>
+                    </div>
+                    <div class="ui-g-6">
+                        <input type="text" class="form-control" [(ngModel)]="model.sponserContact" name="sponserContact" maxlength='100' #sponserContactInput="ngModel" required />
+                        <div *ngIf="sponserContactInput.invalid">
+                            <span class="chapter" [hidden]="!sponserContactInput.touched ">
+                                <small>Sponsor Contact required</small>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-12">
+                <div class="ui-g-6" style="padding-top: 13px;">
+                    <label class="label" for="chapterContact">Contract Terms:</label>
+                </div>
+                <div class="ui-g-12">
+                    <p-editor id="national-proposed-contract-terms" [(ngModel)]="model.contractTerm" name="contractTerm" (onTextChange)="checkLengthOfCharacters($event)" [style]="{'height':'320px'}">
+                    </p-editor>
+                </div>
+                <div>
+                    <span class="chapter">
+                        <small>{{ pcTermsLengthError}}</small>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" class="btn btn-info btn-sm float-right" *ngIf="updateButton" (click)="updateSponsorData(sponsorForm.value)">Update Sponsor</button>
+            <button type="button" class="btn btn-info float-right btn-sm" *ngIf="addButton" (click)="saveSponsor(sponsorForm.vaule)" [disabled]="!sponsorForm.valid">Save Sponsor</button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Ascend {{selectedChapter | uppercase}}: {{termsOf}} Partnership Terms" appendToBody="true" [(visible)]="terms" [responsive]="true" showEffect="fade" [modal]="true" width="1200" styleClass="memberDailog contract-terms-custom" id="sTerms">
+    <div class="contract-terms-custom" [innerHtml]="termData" #tDiv></div>
+    <div class="footer-bar">
+        <i class="fa fa-print float-lg-right" (click)="printTerms(tDiv)" style="font-size: 1.7em">&nbsp;</i>
+        <i class="fa fa-copy float-lg-right" (click)="copyTerms(tDiv)" style="font-size: 1.7em">&nbsp;</i>
+    </div>
+</p-dialog>
+
+<p-confirmDialog header={{confirmHead}} appendTo="body" icon="pi pi-exclamation-triangle" width="425"></p-confirmDialog>

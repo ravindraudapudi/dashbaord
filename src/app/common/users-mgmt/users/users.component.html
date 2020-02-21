@@ -1,0 +1,173 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<div class="ui-helper-clearfix">
+    <div class="row">
+        <!-- SERACH FIELD -->
+        <div class="ui-g-12 ui-md-4" style="padding:15px">
+            <div class="ui-inputgroup">
+                <input #gb type="text" pInputText size="25" class="form-control" placeholder="Search" style="margin: 0px 15px;">
+            </div>
+        </div>
+        <!-- ADD USER BUTTON -->
+        <div class="col-sm-5"></div>
+        <div class="col-md-3">
+            <button type="button" *ngIf="createUser" class="btn btn-info btn-sm float-right" (click)="showDialogToAddUser()" label="">Add
+        User</button>
+        </div>
+    </div>
+</div>
+<!-- [(selection)]="selected_user"  -->
+<p-dataTable [globalFilter]="gb" [value]="usersDetails" [responsive]="true" [rows]="8" [paginator]="false" id="userTable" [scrollable]="true" scrollHeight="400px" id="config" class="user-config">
+    <p-column field="firstName" header="First Name" [sortable]="true" sortField="firstname">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field] | titlecase}}
+        </ng-template>
+    </p-column>
+    <p-column field="middleName" header="Middle Name" [sortable]="true" sortField="middleName">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field] | titlecase}}
+        </ng-template>
+    </p-column>
+    <p-column field="lastName" header="Last Name" [sortable]="true" sortField="lastName">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field] | titlecase}}
+        </ng-template>
+    </p-column>
+    <p-column field="roles" header="Role" [sortable]="true" sortField="roles">
+
+    </p-column>
+    <p-column field="chapters" header="Chapter" [sortable]="true" sortField="chapters">
+
+    </p-column>
+    <p-column field="username" header="Email-Id" [sortable]="true" sortField="username">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field]}}
+        </ng-template>
+    </p-column>
+    <p-column field="id" header="Action" styleClass="col-icon1" [style]="{'width':'100px' ,'overflow-x': 'auto','padding':'10px','text-align':'left'}">
+        <ng-template let-rowUser="rowData" pTemplate="body">
+            <i class="fa fa-1x fa-edit" style="color:darkgrey" pTooltip="Edit" (click)="userEditDailogue(rowUser)"></i>
+            <i class="fa fa-1x fa-check" *ngIf="rowUser?.status == true" style="color:green" pTooltip="Deactivate" (click)="userActive(rowUser)"></i>
+            <i class="fa fa-1x fa-times" *ngIf="rowUser?.status == false" style="color:red" pTooltip="Activate" (click)="userActive(rowUser)"></i>
+        </ng-template>
+    </p-column>
+</p-dataTable>
+<p-dialog header={{dialog_header}} appendTo="body" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" width="600" [contentStyle]="{'max-height':'350px'}" styleClass="active">
+    <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="userInfo">
+        <form #addUserForm="ngForm" autocomplete="off">
+            <div class="ui-grid-row  form-group">
+                <div class="ui-grid-col-6">
+                    <label class="dialogLabel" for="firstName">First Name&nbsp;&nbsp;:</label>
+                </div>
+                <div class="ui-grid-col-6">
+                    <input class="form-control" name="firstname" [pKeyFilter]="nameRegEx" pInputText maxlength="30" required [(ngModel)]="userInfo.firstName" #name="ngModel" />
+                    <div class="danger" *ngIf="name.invalid && (name.dirty || name.touched)">
+                        <span *ngIf="name.errors.required">
+              <small>Firstname Required</small>
+            </span>
+                    </div>
+                </div>
+
+                <div class="ui-grid-col-6">
+                    <label class="dialogLabel" for="middleName">Middle Name&nbsp;&nbsp;:</label>
+                </div>
+                <div class="ui-grid-col-6">
+                    <input class="form-control" pKeyFilter="nameRegEx" pInputText maxlength="30" name="middlename" placeholder="" pInputText maxlength="20" [(ngModel)]="userInfo.middleName" />
+                </div>
+            </div>
+
+            <!--Last Name-->
+            <div class="ui-grid-row  form-group">
+                <div class="ui-grid-col-6">
+                    <label class="dialogLabel" for="lastName">Last Name&nbsp;&nbsp;:</label>
+                </div>
+                <div class="ui-grid-col-6">
+                    <input class="form-control" pKeyFilter="nameRegEx" pInputText maxlength="30" name="lastname" placeholder="" pInputText maxlength="20" [(ngModel)]="userInfo.lastName" />
+                </div>
+
+                <div class="ui-grid-col-6">
+                    <label class="dialogLabel" for="role">Role&nbsp;&nbsp;:</label>
+                </div>
+                <div class="ui-grid-col-6">
+                    <select class="form-control" [(ngModel)]="userInfo.roles" name="role" #role="ngModel" required="true">
+            <option hidden value="" disabled selected>--Select--</option>
+            <option *ngFor="let data of userRoles" style="text-transform: capitalize">{{data}}</option>
+          </select>
+                    <div class="danger" *ngIf="role.invalid && (role.dirty || role.touched)">
+                        <span *ngIf="role.errors.required">
+              <small>Role Required</small>
+            </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email field -->
+            <div class="ui-grid-row form-group">
+                <div class="ui-grid-col-6">
+                    <label class="dialogLabel" for="username">Email Id&nbsp;&nbsp;:</label>
+                </div>
+                <div class="ui-grid-col-6">
+                    <!-- [disabled]="userRead" -->
+                    <input type="email" class="form-control" name="username" placeholder="you@example.org" pattern="^[a-zA-Z0-9.!#$%&amp;'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,63})*$" pInputText pKeyFilter="email" required [(ngModel)]="userInfo.username" #username="ngModel"
+                        autocomplete="false" />
+
+                    <div class="danger" *ngIf="username.invalid && (username.dirty || username.touched)">
+                        <span *ngIf="username.errors.required && username.touched">
+              <small>email required</small>
+            </span>
+                        <span *ngIf="username.errors.pattern && username.touched">
+              <small>Invalid Email Id</small>
+            </span>
+                    </div>
+                </div>
+
+                <div class="ui-grid-col-6">
+                    <label class="dialogLabel" for="chapter">Chapter&nbsp;&nbsp;:</label>
+                </div>
+                <div class="ui-grid-col-6">
+                    <p-multiSelect [options]="chapters" appendTo="body" optionLabel="chapterName" name="chapters" [(ngModel)]="selectedChapters" (onChange)="onChangeChapter($event)" [maxSelectedLabels]="1" [panelStyle]="{minWidth:'8em'}" [style]="{'text-transform': 'capitalize'}"
+                        required required="true" #chapter="ngModel"></p-multiSelect>
+                    <div class="danger" *ngIf="chapter.invalid && (chapter.dirty || chapter.touched)">
+                        <span *ngIf="chapter.errors.required">
+              <small>Chapter Name Required</small>
+            </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-grid-row  form-group">
+                <div class="ui-grid-col-6" *ngIf="passData">
+                    <label class="dialogLabel" for="pass">Password&nbsp;&nbsp;:</label>
+                </div>
+                <div class="ui-grid-col-6" *ngIf="passData">
+                    <input type="password" class="form-control" name="pass" placeholder="Az09@123" pInputText maxlength="20" minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\d)(?=.*[$!@#&])[A-Za-z0-9\d$!@#&]{8,}" [pKeyFilter]="noSpace" [(ngModel)]="userInfo.password"
+                        #pass="ngModel" required autocomplete="new-password" />
+                    <div class="danger" *ngIf="pass.invalid && (pass.dirty || pass.touched)">
+                        <span *ngIf="pass.errors.required">
+              <small>Password Required</small>
+            </span>
+                        <span *ngIf="pass.errors?.pattern &&  pass.touched">
+              <small>Password Pattern, including:<br />
+                uppercase, lowercase,numbers and $!@#&</small>
+            </span>
+                        <span *ngIf="pass.errors?.minlength &&  pass.touched">
+              <small>Minimum 8 Characters</small>
+            </span>
+                    </div>
+                </div>
+                <div class="ui-grid-col-6" *ngIf="!passTab">
+                </div>
+                <div class="ui-grid-col-6" *ngIf="!passTab">
+                </div>
+            </div>
+        </form>
+        <div class=" ui-grid-col-12 pull-right ui-dialog-buttonpane ui-helper-clearfix">
+            <div class="row">
+                <div class="col-md-12 btn-edit">
+                    <button type="reset" class="btn btn-info float-right btn-sm" (click)="cancel()">Cancel</button>
+                    <button type="button" class="btn btn-info float-right btn-sm" *ngIf="add_button" [disabled]="(!addUserForm.form.valid)" (click)="saveUser()">Save</button>
+                    <button type="button" class="btn btn-info float-right btn-sm" *ngIf="update_button" [disabled]="(!addUserForm.form.valid)" (click)="updateUser()">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>

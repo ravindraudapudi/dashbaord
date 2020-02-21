@@ -1,0 +1,36 @@
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+
+.mail-box {
+    border: groove;
+    border-radius: 7px;
+    border-color: whitesmoke;
+    text-indent: 5px;
+}
+
+abbr[title] {
+    text-decoration: none !important;
+}
+
+.custom-anchor {
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.custom-mail-button {
+    position: fixed;
+    z-index: 1000;
+    background-color: white;
+    bottom: 4%;
+}
+
+
+/* a:hover {
+    text-decoration: underline !important;
+    color: blue !important;
+    cursor: not-allowed;
+} */

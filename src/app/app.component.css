@@ -1,0 +1,9 @@
+a.dropdown-item:hover {
+    color: white !important;
+}
+
+.userinfo {
+    font-size: 0.75em;
+    font-weight: 400;
+    color:whitesmoke;
+};

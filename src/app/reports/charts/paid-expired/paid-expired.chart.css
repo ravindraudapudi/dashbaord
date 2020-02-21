@@ -1,0 +1,6 @@
+.downloadIcon {
+    margin-right: 20px;
+    position: absolute;
+    right: 0;
+    z-index: 1000;
+}

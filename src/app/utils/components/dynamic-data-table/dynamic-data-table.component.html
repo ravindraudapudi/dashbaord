@@ -1,0 +1,28 @@
+<p-table #dt [columns]="cols" [value]="valuesfortable" [rowsPerPageOptions]="[10,20,30]" [paginator]="customPaginator" [rows]="customRows"
+[scrollable]="customScroll">
+    <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+            <col *ngFor="let col of columns">
+        </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns">
+                {{col.header}}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [ngClass]="'table-color'">
+            <td *ngFor="let col of columns">
+                {{rowData[col.field]}}
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="caption">
+            <div class="ui-helper-clearfix">
+                <button type="button" pButton icon="fa fa-file-o" iconPos="left" label="Export Data to CSV" (click)="dt.exportCSV()" style="float:right"></button>
+                <!-- <button type="button" pButton icon="fa fa-file" iconPos="left" label="Selection Only" (click)="dt.exportCSV({selectionOnly:true})" style="float:right"></button> -->
+            </div>
+        </ng-template>
+</p-table>

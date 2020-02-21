@@ -1,0 +1,28 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<label class="px-3 card-title"> {{selectedChapter | titlecase}} Chapter</label>
+<div class="row">
+  <div class="col-lg-3 col-md-4 col-sm-7 col-xs-12 widget-fill">
+    <a style="text-decoration: none;">
+      <em-total-revenue [data]="wTtotalRevenue"></em-total-revenue>
+    </a>
+  </div>
+  <div class="col-lg-3 col-md-4 col-sm-7 col-xs-12 widget-fill">
+    <a style="text-decoration: none;">
+      <em-expiration-rate [data]="wExpirationRate"></em-expiration-rate>
+    </a>
+  </div>
+  <div class="col-lg-3 col-md-4 col-sm-7 col-xs-12 widget-fill">
+    <a style="text-decoration: none;">
+      <em-paid-local-sponsored-membership [data]="wPaidSponsored"></em-paid-local-sponsored-membership>
+    </a>
+  </div>
+</div>
+
+<div class="row">
+  <div id="progress" class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
+    <em-chapter-progress [config]="membershipGoal"></em-chapter-progress>
+  </div>
+  <div id="progress" class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
+    <em-chapter-progress [config]="revenueGoal"></em-chapter-progress>
+  </div>
+</div>

@@ -1,0 +1,90 @@
+.card {
+    margin-top: 0px !important;
+}
+
+.card .card-body {
+    padding: 11px !important;
+    position: relative !important;
+}
+
+.card .card-body label {
+    margin-bottom: 5px;
+    font-size: 12px;
+    color: #000000;
+    font-weight: 500;
+}
+
+.card .card-body span{
+    font-size: 12px;
+    color: #000000;
+    font-weight: 400;
+}
+
+.col-8 .card{
+    margin-bottom: 10px !important;
+}
+
+.divider {
+    height: 1px;
+    margin: 9px 0;
+    overflow: hidden;
+    background-color: rgba(112, 108, 108, 0.87);
+  }
+
+.imageUpload
+{
+    display: none;
+}
+
+.profile{
+    margin-top: -10px;
+    margin-bottom: 11px;
+}
+
+.profile label{
+    font-size: 12px;
+    color: #000000;
+    font-weight: 500;
+    font-style: normal;
+    font-variant: titling-caps;
+    margin-bottom: 0rem!important;
+}
+
+.profileImage
+{
+    cursor: pointer;
+}
+
+.profile-container img {
+    width: 50px;
+    margin: 2% 0% 1% 0%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+    border-radius: 50%;
+}
+
+.content label{
+    margin-bottom: auto;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #000000;
+    font-weight: 500;
+}
+
+.content span{
+    margin-left: 21px;
+    font-size: 12px;
+    color: #000000;
+    font-weight: 300;
+}
+
+.activity{
+    display: grid;
+}
+
+.activity label {
+    margin-bottom: auto;
+}

@@ -1,0 +1,18 @@
+.dialogLabel {
+    display: inline-block;
+    margin: 10px 0px 0px 20px!important;
+}
+
+.form-check, label {
+    font-size: 14px;
+    line-height: 1.42857;
+    color: #212121;
+    font-weight: 400;
+}
+
+.btn-edit{
+    display: flex;
+    width: 100%;
+    margin-top:0%;
+    margin-left: 55px;
+}

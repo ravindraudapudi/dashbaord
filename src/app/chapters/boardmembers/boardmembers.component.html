@@ -1,0 +1,210 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <button  type="submit" class="btn btn-info btn-sm float-right" (click)="showDialog()"
+            [disabled]="!edBoardMember">Add
+            Member's</button>
+        <div class="mt-2"></div>
+    </div>
+</div>
+<p-dataTable #dt [value]="memberDataTable" selectionMode="single" [rows]="10" [paginator]="true" [responsive]="true"
+    id="config" class="boardMember">
+    <p-column field="apiGuid" header="GUID" [sortable]="true" sortField="apiGuid">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field] | titlecase}}
+        </ng-template>
+    </p-column>
+    <p-column field="email" header="Email" [sortable]="true" sortField="email">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field]}}
+        </ng-template>
+    </p-column>
+    <p-column field="firstName" header="First Name" [sortable]="true" sortField="firstName">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field]}}
+        </ng-template>
+    </p-column>
+    <p-column field="lastName" header="Last Name" [sortable]="true" sortField="lastName">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field]}}
+        </ng-template>
+    </p-column>
+    <p-column field="memberRole" header="Your Chapter Role" [sortable]="true" sortField="memberRole">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field]}}
+        </ng-template>
+    </p-column>
+    <p-column field="phone" header="Phone" [sortable]="true" sortField="phone">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field]}}
+        </ng-template>
+    </p-column>
+    <p-column field="organisation" header="Organization" [sortable]="true" sortField="organisation">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field]}}
+        </ng-template>
+    </p-column>
+    <p-column field="alternateEmail" header="Alternate Email" [sortable]="true" sortField="alternateEmail">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field]}}
+        </ng-template>
+    </p-column>
+    <p-column field="status" header="Status" [sortable]="true" sortField="status">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            <span [ngStyle]="{ 'color':(item[col.field] === true || item[col.field] === 'ACTIVE'? 'green' : ( item[col.field] === false || item[col.field] === 'EXPIRED'?  'red' : 'blue')), 
+          'font-weight':'800'}">
+                {{ item[col.field] }}
+            </span>
+        </ng-template>
+    </p-column>
+    <p-column field="" header="Action" [style]="{'width':'100px' ,'overflow-x': 'auto','padding':'10px'}">
+        <ng-template let-rowUser="rowData" pTemplate="body">
+            <i class="fa fa-edit" [ngClass]="{'disableBoardMember':!edBoardMember}"
+                style="cursor:pointer; color:grey ; padding :8px" (click)="editBoardMember(rowUser)"
+                pTooltip="Edit"></i>
+            <i class="fa fa-trash" [ngClass]="{'disableBoardMember':!edBoardMember}" style="cursor:pointer;color:red"
+                (click)="confirmation(rowUser)" pTooltip="delete"></i>
+        </ng-template>
+    </p-column>
+
+
+</p-dataTable>
+<button *ngIf="export" class="btn btn-info btn-sm float-right" (click)="exportCSV(dt)">Export to CSV</button>
+
+<p-dialog header={{dialogeHead}} appendToBody="true"  [(visible)]="displayDialog"  [responsive]="true" showEffect="fade"
+    [modal]="true" [width]="580" [contentStyle]="{'max-height':'430px'}" styleClass="active" *ngIf="boardMember">
+    <form #boardMemberForm="ngForm">
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <div class="ui-g-4">
+                    <label for="id">GUID</label>
+                </div>
+                <div class="ui-g-8">
+                    <input type="text" class="form-control" name='id' (focusout)="focusOutFunction($event)"
+                        placeholder="Member's GUID" [pKeyFilter]="guidRegEx" maxlength="100" required
+                        [(ngModel)]='boardMember.apiGuid' #id="ngModel" />
+                    <div class="danger" *ngIf="id.invalid && (id.dirty || id.touched)">
+                        <span *ngIf="id.errors.required && id.touched">
+                            <small>GUID Required</small>
+                        </span>
+                        <span *ngIf="id.errors.pattern && id.touched">
+                            <small>Invalid GUID</small>
+                        </span>
+                        <span *ngIf="guidError">
+                            <small>{{guidError}}</small>
+                        </span>
+                    </div>
+                    <span *ngIf="guidError">
+                        <small>{{guidError}}</small>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-4">
+                    <label for="mail">Email ID</label>
+                </div>
+                <div class="ui-g-8">
+                    <input type="email" class="form-control" name='mail' placeholder="eg:you@example.org"
+                        [(ngModel)]='boardMember.email' pKeyFilter="email" maxlength="320" minimum="2" #mail="ngModel"
+                        required />
+                    <div class="danger" *ngIf="mail.invalid && (mail.dirty || mail.touched)">
+                        <span *ngIf="mail.errors.required && mail.touched">
+                            <small>Email Required</small>
+                        </span>
+                        <span *ngIf="mail.errors.pattern && mail.touched">
+                            <small>Invalid Email</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-4">
+                    <label for="fname">First Name</label>
+                </div>
+                <div class="ui-g-8">
+                    <input type="text" class="form-control" name='fname' placeholder="First Name"
+                        [(ngModel)]='boardMember.firstName' [pKeyFilter]="nameRegEx" maxlength="20" #fname="ngModel"
+                        required />
+                    <div class="danger" *ngIf="fname.invalid && (fname.dirty || fname.touched)">
+                        <span *ngIf="fname.errors.required">
+                            <small>Firstname Required</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-4">
+                    <label for="lname">Last Name</label>
+                </div>
+                <div class="ui-g-8">
+                    <input type="text" class="form-control" name='lname' placeholder="Last Name"
+                        [(ngModel)]='boardMember.lastName' pKeyFilter="alpha" maxlength="20" #lname="ngModel"
+                        required />
+                    <div class="danger" *ngIf="lname.invalid && (lname.dirty || lname.touched)">
+                        <span *ngIf="lname.errors.required">
+                            <small>Lastname Required</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-g-4">
+                    <label for="mrole">Your Chapter Role</label>
+                </div>
+                <div class="ui-g-8">
+                    <input type="text" class="form-control" name='mrole' placeholder="Your Chapter Role"
+                        [(ngModel)]='boardMember.memberRole'  #mrole="ngModel" required />
+                    <div class="danger" *ngIf="mrole.invalid && (mrole.dirty || mrole.touched)">
+                        <span *ngIf="mrole.errors.required">
+                            <small>Chapter Role Required</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-4">
+                    <label for="phoneId">Phone</label>
+                </div>
+                <div class="ui-g-8">
+                    <input type="text" class="form-control" name='phoneId' placeholder="Phone" [pKeyFilter]="phoneRegEx"
+                        maxlength="13" [(ngModel)]='boardMember.phone' #phoneId="ngModel" />
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-4">
+                    <label for="altmail">Alernate Email ID</label>
+                </div>
+                <div class="ui-g-8">
+                    <input type="email" class="form-control" name='altmail' placeholder="eg:you@example.org"
+                        [(ngModel)]='boardMember.alternateEmail' pKeyFilter="email" maxlength="320"
+                        #altMail="ngModel" />
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-4">
+                    <label for="id">Organization</label>
+                </div>
+                <div class="ui-g-8">
+                    <input type="text" class="form-control" name='org' placeholder="Organization"
+                        [pKeyFilter]="nameRegEx" maxlength="100" required [(ngModel)]='boardMember.organisation'
+                        #org="ngModel" />
+                    <div class="danger" *ngIf="org.invalid && (org.dirty || org.touched)">
+                        <span *ngIf="org.errors.required && org.touched">
+                            <small>Organization Required</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" class="btn btn-info float-right btn-sm" [disabled]="(!boardMemberForm.form.valid)"
+                (click)="addBoardMember()" *ngIf="addButton">Save Board Member</button>
+            <button type="button" class="btn btn-info float-right btn-sm" [disabled]="(!boardMemberForm.form.valid)"
+                (click)="updateBoardMember(boardMemberForm.value)" *ngIf="updateButton">Update Board Member</button>
+        </div>
+    </p-footer>
+</p-dialog>
+<p-confirmDialog header={{confirmHead}} appendTo="body" icon="pi pi-exclamation-triangle" width="425"></p-confirmDialog>

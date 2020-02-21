@@ -1,0 +1,56 @@
+<p-dataTable #dt [value]="memberDataTable" selectionMode="multiple" [paginator]="false" [responsive]="true" (onRowDblclick)="memberDetails($event)" id="snapshot" [scrollable]="true" scrollHeight="320px">
+
+    <p-column field="firstName" header="First Name" [sortable]="true" sortField="firstName">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field] | titlecase}}
+        </ng-template>
+    </p-column>
+
+
+    <p-column field="lastName" header="Last Name" [sortable]="true" sortField="lastName">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field] | titlecase}}
+        </ng-template>
+    </p-column>
+
+    <p-column field="email" header="Email" [sortable]="true" sortField="email" sortField="email">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field] | titlecase}}
+        </ng-template>
+    </p-column>
+
+    <p-column field="expiryDate" header="Expiration" [sortable]="true" sortField="expiryDate">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{ item[col.field] | date: 'M/d/yyyy' }}
+        </ng-template>
+    </p-column>
+
+    <p-column field="company" header="Company" [sortable]="true" *ngIf="!forSponsership" sortField="company">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field] }}
+        </ng-template>
+    </p-column>
+
+    <p-column field="sponsor" header="Sponsor" [sortable]="true" *ngIf="forSponsership" sortField="sponsor">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field] }}
+        </ng-template>
+    </p-column> -->
+
+    <p-column field="sponsershipCode" header="Code" [sortable]="true" *ngIf="forSponsership" sortField="sponsershipCode">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{ item[col.field] }}
+        </ng-template>
+    </p-column>
+
+    <p-column field="emailBounced" header="Mail Bounced" [sortable]="true" *ngIf="!forSponsership" sortField="emailBounced">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{ item[col.field] }}
+        </ng-template>
+    </p-column>
+</p-dataTable>
+
+<button *ngIf="export" type="button" class="btn btn-info btn-sm float-left" (click)="exportCSV(dt)">Export to CSV</button>
+<div *ngIf="memberView">
+    <em-member-view [memberData]="memberData"></em-member-view>
+</div>

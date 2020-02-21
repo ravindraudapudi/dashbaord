@@ -1,0 +1,16 @@
+<div class="tab-content">
+  <div class="row">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+      <div style="display:flex; flex-direction: column;">
+        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="userActive();" [ngStyle]="{'background-color': buttonUser,'color':'#FFF'}"
+          [routerLink]="['user']" routerLinkActive="active">User</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="roleActive();"
+          [ngStyle]="{'background-color': buttonRole, 'color':'#FFF'}" [routerLink]="['role']" routerLinkActive="active" [disabled]="!setUpRoles"> Roles
+          & Privileges</button>
+      </div>
+    </div>
+    <div class="col-lg-10 col-md-10 col-sm-10">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

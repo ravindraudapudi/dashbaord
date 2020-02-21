@@ -1,0 +1,53 @@
+<nav id="menu">
+    <div class="nav nav-tabs tab-menu" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link" id="nav-dashboard-tab" data-toggle="tab" role="tab" aria-controls="nav-dashboard" aria-selected="true" [routerLink]="['dashboard']" routerLinkActive="active" (click)="enableDropDown()">
+            <i class="fa fa-tachometer"></i>
+            <span class="nav-text">
+        National
+      </span>
+            <div class="triangle-down"></div>
+        </a>
+        <a class="nav-item nav-link" id="nav-chapters-tab" data-toggle="tab" role="tab" aria-controls="nav-chapters" aria-selected="true" [routerLink]="[routingUrl,selectedCode]" [ngClass]="{'active':chapterActiveFlag}" (click)="enableDropDown()">
+            <i class="fa fa-list-ul"></i>
+            <span class="nav-text">
+        Chapters
+      </span>
+            <div class="triangle-down"></div>
+        </a>
+
+        <a class="nav-item nav-link" id="nav-config-tab" data-toggle="tab" role="tab" aria-controls="nav-config" *ngIf="enableSettings" aria-selected="true" [routerLink]="['configs']" routerLinkActive="active" (click)="disableDropDown()">
+            <i class="fa fa-cog"></i>
+            <span class="nav-text">
+        Settings
+      </span>
+            <div class="triangle-down"></div>
+        </a>
+
+        <div class="drop-down-label" *ngIf="isShowdropdown">
+            <label style="color: white;">Reporting Date&nbsp;&nbsp;</label>
+            <select [(ngModel)]="selectedDate" (change)="selectedDateValue()" class="report-date-selector">
+        <option *ngFor="let rDate of selectedValue?.csvLog" class = "report-date-option">
+          {{rDate.reportingDate }}</option>
+      </select>
+        </div>
+
+        <label class="rDate-drop-down-label" *ngIf="isShowdropdown">
+      <label style="color: white;">Fiscal Year&nbsp;&nbsp;</label>
+        <select [(ngModel)]="selectedValue" (change)="selectedFiscalYear(selectedValue)" class="report-date-selector" [compareWith]="compareByID">
+        <option *ngFor="let fiscalYear of fiscalYears" [ngValue]="fiscalYear" [selected]="fiscalYear == selectedValue" class = "report-date-option" >
+          {{fiscalYear.fiscaYear }}</option>
+      </select>
+        </label>
+
+        <a type="button" *ngIf="_upload" class="nav-item nav-link upload" data-toggle="tab" role="tab" aria-controls="nav-config" aria-selected="true" [routerLink]="['uploads']" routerLinkActive="active">
+            <i class="fa fa-cloud-upload"></i>&nbsp;
+            <span class="nav-text">
+        Upload
+      </span>
+        </a>
+    </div>
+</nav>
+<!-- <div>
+  <em-national-dashboard></em-national-dashboard>
+</div> -->
+<router-outlet></router-outlet>

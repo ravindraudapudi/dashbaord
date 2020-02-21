@@ -1,0 +1,73 @@
+.row {
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+
+.card {
+    padding: 11px !important;
+    margin-bottom: 15px !important;
+    margin-top: 15px !important;
+    position: relative !important;
+}
+
+.card-body {
+    padding: 11px !important;
+    position: relative !important;
+}
+
+.avatar-pic {
+    width: 130px;
+  }
+
+  .btn-file {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+  }
+
+  .mb-4{
+      margin-bottom: 0rem!important;
+  }
+
+  .uploadButton{
+      padding-top:30px;
+  }
+
+  .custom-select {
+    height: calc(1.5rem)!important;
+    padding: 0.175rem 0.75rem 0.175rem 0.75rem !important;
+    line-height: 1.5 !important;
+    font-size: 12px !important;
+    font-weight: 500;
+  }
+
+ .input-group>.custom-select {
+    position: relative;
+    flex: none;
+    width: 35% !important;
+    margin-bottom: 0;
+}
+
+.card-column-outer{
+    height:385px;
+}
+.card-column-inner{
+    overflow-y:scroll;
+    height:310px;
+    position: relative
+}
+

@@ -1,0 +1,12 @@
+.fy-dropdown{
+    margin-top: -3px;
+    width: 100% !important;
+    margin-bottom: -10px;
+    justify-content: flex-end;
+}
+
+.fy-dropdown label{
+    margin:0px 0px 15px -13px;
+    font-size:13px;
+    font-weight: 500;
+}

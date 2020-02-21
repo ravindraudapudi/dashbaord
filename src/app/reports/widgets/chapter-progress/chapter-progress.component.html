@@ -1,0 +1,33 @@
+<div *ngIf="show" class="card card-stats" id="progress-line">
+  <div class="card-header">
+    <h4 class="card-title">{{progress.title}}</h4>
+    <!-- <p class="card-category">Memberships in Goal</p> -->
+  </div>
+  <div class="card-body mt-3">
+    <div class="progress-card">
+      <circle-progress
+        [percent]="progress.percent" 
+        [radius]="70" 
+        [space]=1 
+        [titleFontSize] = "18"
+        [unitsFontSize] = "18"
+        [outerStrokeLinecap]='round'
+        [outerStrokeWidth]="9" 
+        [innerStrokeWidth]="3" 
+        [outerStrokeColor]="'#2ABFBB'" 
+        [innerStrokeColor]="'#CACACA'"
+        [animation]="true" 
+        [animationDuration]="400"  
+        [showSubtitle]="false" 
+        [showBackground]="true">
+      </circle-progress>
+      <!-- [titleFontSize]="25" 
+      [titleFontWeight]="60" 
+      [unitsFontSize]="30"
+      [subtitleFontSize]="30" -->
+    </div>
+     <div class="stats px-2">
+      {{progress.label}} {{progress.membershipTarget}}
+    </div> 
+  </div>
+</div>

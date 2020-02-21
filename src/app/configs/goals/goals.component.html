@@ -1,0 +1,219 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<!-- <div class="goal-table"> -->
+<div class="btn-table-top">
+    <div class="input-group fy-dropdown">
+        <div class="input-group-prepend">
+            <label class="input-group-text">Fiscal Year :</label>
+        </div>
+        <p-dropdown [options]="fiscalYears" appendTo="body" optionLabel="label" [(ngModel)]="selectedFiscalYear" [style]="{'width':'150px','margin-bottom':'15px'}" (onChange)="fiscalSelection()"></p-dropdown>
+    </div>
+    <p-dataTable [value]="goalData" selectionMode="single" [rows]="10" [paginator]="false" [responsive]="true" id="config" class="goal" [scrollable]="true" scrollHeight="400px">
+        <p-column field="chapterName" header="Chapter Name" [sortable]="false" sortField="chapterName">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{item[col.field] | titlecase}}
+            </ng-template>
+        </p-column>
+        <p-column field="totalActiveMembershipGoal" header="Total Active Membership" [sortable]="true" sortField="totalActiveMembershipGoal">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{item[col.field]}}
+            </ng-template>
+        </p-column>
+        <p-column field="paidMembershipGoal" header="Member-Paid Membership" [sortable]="true" sortField="paidMembershipGoal">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{item[col.field]}}
+            </ng-template>
+        </p-column>
+        <p-column field="localSponseredMembershipGoal" header="Local Sponsor-Paid Membership" [sortable]="true" sortField="localSponseredMembershipGoal">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{item[col.field]}}
+            </ng-template>
+        </p-column>
+        <p-column field="nationalSponsoredMembershipGoal" header="National Sponsor-Paid Membership" [sortable]="true" sortField="nationalSponsoredMembershipGoal">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{item[col.field]}}
+            </ng-template>
+        </p-column>
+        <p-column field="totalRevenueGoal" header="Total Revenue" [sortable]="true" sortField="totalRevenueGoal">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{item[col.field]}}
+            </ng-template>
+        </p-column>
+        <p-column field="membershipRevenueGoal" header="Membership Revenue" [sortable]="true" sortField="membershipRevenueGoal">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{item[col.field]}}
+            </ng-template>
+        </p-column>
+        <p-column field="registrationEventsGoal" header="Registration Events" [sortable]="true" sortField="registrationEventsGoal">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{item[col.field]}}
+            </ng-template>
+        </p-column>
+        <p-column field="programRevenueGoal" header="Program Revenue" [sortable]="true" sortField="programRevenueGoal">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{item[col.field]}}
+            </ng-template>
+        </p-column>
+        <p-column field="expirationRateGoal" header="Expiration rate" [sortable]="true" sortField="expirationRateGoal">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{item[col.field]}}
+            </ng-template>
+        </p-column>
+        <p-column field="otherRevenueGoal" header="Other Revenue " [sortable]="true" sortField="otherRevenueGoal">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{item[col.field]}}
+            </ng-template>
+        </p-column>
+        <!--*ngIf="setGoal" -->
+        <p-column field="membershipRevenueGoal" header="Action" [style]="{'width':'100px' ,'overflow-x': 'auto','padding':'10px','text-align':'left'}">
+            <ng-template let-rowUser="rowData" pTemplate="body">
+                <i class="fa fa-edit" style="cursor:pointer; color:grey" (click)="editGoal(rowUser)" pTooltip="edit"></i>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+</div>
+<p-dialog header={{dialogeHead}} appendTo="body" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" width="580" [contentStyle]="{'max-height':'450px'}" styleClass="active">
+    <form #goalForm="ngForm">
+        <div class="ui-g ui-fluid" *ngIf="fiscal">
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label for="TAM">Total Active Membership</label>
+                </div>
+                <div class="ui-g-6">
+                    <input #TAM="ngModel" pInputText [(ngModel)]="fiscal.totalActiveMembershipGoal" class="form-control" name="TAM" maxlength="10" pKeyFilter="pnum" required onpaste="return false" />
+                    <div class="danger" *ngIf="TAM.invalid && (TAM.dirty || TAM.touched)">
+                        <span *ngIf="TAM.errors.required">
+                            <small>Total active membership required</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label for="PM">Paid Membership</label>
+                </div>
+                <div class="ui-g-6">
+                    <input #PM="ngModel" pInputText [(ngModel)]="fiscal.paidMembershipGoal" class="form-control" name="PM" maxlength="10" pKeyFilter="pnum" required onpaste="return false" />
+                    <div class="danger" *ngIf="PM.invalid && (PM.dirty || PM.touched)">
+                        <span *ngIf="PM.errors.required">
+                            <small>Paid membership required</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label for="LSM">Local Sponsored Membership</label>
+                </div>
+                <div class="ui-g-6">
+                    <input class="form-control" name="LSM" pInputText [(ngModel)]="fiscal.localSponseredMembershipGoal" #LSM="ngModel" maxlength="10" pKeyFilter="pnum" required onpaste="return false" />
+                    <div class="danger" *ngIf="LSM.invalid && (LSM.dirty || LSM.touched)">
+                        <span *ngIf="LSM.errors.required">
+                            <small>Local sponsored membership required</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label for="NSM">National Sponsored Membership</label>
+                </div>
+                <div class="ui-g-6">
+                    <input type="number" class="form-control" name="NSM" pInputText [(ngModel)]="fiscal.nationalSponsoredMembershipGoal" #NSM="ngModel" maxlength="10" pKeyFilter="pnum" required onpaste="return false" />
+                    <div class="danger" *ngIf="NSM.invalid && (NSM.dirty || NSM.touched)">
+                        <span *ngIf="NSM.errors.required">
+                            <small>National sponsored membership required</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label for="TR">Total Revenue</label>
+                </div>
+                <div class="ui-g-6">
+                    <input class="form-control" name="TR" pInputText [(ngModel)]="fiscal.totalRevenueGoal" #TR="ngModel" maxlength="10" pKeyFilter="pnum" required onpaste="return false" />
+                    <div class="danger" *ngIf="TR.invalid && (TR.dirty || TR.touched)">
+                        <span *ngIf="TR.errors.required">
+                            <small>Total revenue is required</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label for="MR">Membership Revenue</label>
+                </div>
+                <div class="ui-g-6">
+                    <input class="form-control" name="MR" pInputText [(ngModel)]="fiscal.membershipRevenueGoal" #MR="ngModel" maxlength="10" pKeyFilter="pnum" required onpaste="return false" />
+                    <div class="danger" *ngIf="MR.invalid && (MR.dirty || MR.touched)">
+                        <span *ngIf="MR.errors.required">
+                            <small>Membership Revenue is required</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label for="RE">Registration Events</label>
+                </div>
+                <div class="ui-g-6">
+                    <input class="form-control" name="RE" pInputText [(ngModel)]="fiscal.registrationEventsGoal" #RE="ngModel" maxlength="10" pKeyFilter="pnum" required onpaste="return false" />
+                    <div class="danger" *ngIf="RE.invalid && (RE.dirty || RE.touched)">
+                        <span *ngIf="RE.errors.required">
+                            <small>Registration Events is required</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label for="PR">Program Revenue</label>
+                </div>
+                <div class="ui-g-6">
+                    <input class="form-control" name="PR" pInputText [(ngModel)]="fiscal.programRevenueGoal" #PR="ngModel" maxlength="10" pKeyFilter="pnum" required onpaste="return false" />
+                    <div class="danger" *ngIf="PR.invalid && (PR.dirty || PR.touched)">
+                        <span *ngIf="PR.errors.required">
+                            <small>Program Revenue is required</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label for="PR">Expiration rate</label>
+                </div>
+                <div class="ui-g-6">
+                    <input class="form-control" name="ER" pInputText [(ngModel)]="fiscal.expirationRateGoal" #ER="ngModel" maxlength="10" pKeyFilter="pnum" required onpaste="return false" />
+                    <div class="danger" *ngIf="PR.invalid && (PR.dirty || PR.touched)">
+                        <span *ngIf="PR.errors.required">
+                            <small>Expirationa rate is required</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label for="0R">Other revenue </label>
+                </div>
+                <div class="ui-g-6">
+                    <input class="form-control" name="0R" pInputText [(ngModel)]="fiscal.otherRevenueGoal" #0R="ngModel" maxlength="10" pKeyFilter="pnum" required onpaste="return false" />
+                    <!-- <div class="danger" *ngIf="0R.invalid && (0R.dirty || 0R.touched)">
+                        <span *ngIf="0R.errors.required">
+                            <small>Other Revenue is required</small>
+                        </span>
+                    </div> -->
+                </div>
+            </div>
+
+        </div>
+    </form>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" class="btn btn-info float-right btn-sm" [disabled]="(!goalForm.form.valid)" (click)="saveGoal()">Save
+                Goals</button>
+        </div>
+    </p-footer>
+</p-dialog>

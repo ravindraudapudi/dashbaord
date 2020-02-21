@@ -1,0 +1,47 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<div id="memberships">
+  <label class="px-3 card-title">{{selectedChapter | titlecase}} Chapter</label>
+  <button type="button" class="btn btn-info btn-sm float-right" style="margin-right: 16px !important;"
+    [routerLink]="['../../allMembers',selectedCode]" (click)="seeAllMembers()">All Members</button>
+  <div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-12 col-xm-12">
+      <div class="card card-body">
+        <em-paid-sponsored-membership-chart id="paidSponsoredId" *ngIf="stackedData" [config]='paidSponsoredConfig'
+          [stackedData]='stackedData' [primaryGroupCode]='primaryGroupCode'
+          (paidAndSponsored)="eventFromPaidSponsored($event)" (exportChart)="downloadpaidSponsoredChart()"
+          [export]='export'>
+        </em-paid-sponsored-membership-chart>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-8 col-sm-12 col-xm-12">
+      <em-snapshot *ngIf="paidSponsored" [exportName]="paidSponsoredConfig" [dataForTable]="paidSponsored"
+        [forSponsership]="true" [reportingDate]="reportingDate" [selectedChapter]="selectedChapter"
+        [fileNameData]="fileNameData"></em-snapshot>
+      <div *ngIf="!paidSponsored" class="card card-body" style="text-align: center;">
+        <label>Click on <strong>Paid & Sponsored Memberships</strong> chart to display member
+          details </label>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-12 col-xm-12">
+      <div class="card card-body">
+        <em-paid-expired-membership-chart id="paidExpiredId" *ngIf="groupedData" [config]='paidExpiredConfig'
+          [groupedData]='groupedData' [primaryGroupCode]='primaryGroupCode'
+          (paidAndExpired)="eventFromPaidExpired($event)" (exportChart)="downloadpaidexpiredChart()" [export]='export'>
+        </em-paid-expired-membership-chart>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-8 col-sm-12 col-xm-12">
+      <em-snapshot *ngIf="paidExpired" [exportName]="paidExpiredConfig" [dataForTable]="paidExpired"
+        [forSponsership]="false" [reportingDate]="reportingDate" [selectedChapter]="selectedChapter"
+        [fileNameData]="fileNameData"></em-snapshot>
+      <div *ngIf="!paidExpired" class="card card-body" style="text-align: center;">
+        <label>Click on <strong>Paid & Expired Memberships</strong> chart to display member
+          details </label>
+      </div>
+      <button *ngIf="paidExpired" type="button" class="btn btn-info btn-sm float-right"
+        [routerLink]="['../../allMembers',selectedCode]" (click)="seeMemberDetails()">See Details</button>
+    </div>
+  </div>
+</div>

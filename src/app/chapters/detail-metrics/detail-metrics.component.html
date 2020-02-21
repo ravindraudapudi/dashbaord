@@ -1,0 +1,43 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<div class="col-sm-12">
+    <label class='card-title'>Overview Details for {{selectedChapter | titlecase}}</label>
+    <p-dataTable #dt [value]="dataForTable" selectionMode="single" [rows]="10" [paginator]="false" [responsive]="true" id="Metrics">
+        <p-column field="chapterName" header={{matrics?.headers.chapterName}} [sortable]="true"
+            sortField="chapterName">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{item[col.field] | titlecase}}
+            </ng-template>
+        </p-column>
+        <p-column field="period1" header={{matrics?.headers.period1}} [sortable]="true" sortField="period1">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{item[col.field] | number: '1.'}}
+            </ng-template>
+        </p-column>
+
+        <p-column field="period2" header={{matrics?.headers.period2}} [sortable]="true" sortField="period2">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{item[col.field] | number: '1.'}}
+            </ng-template>
+        </p-column>
+
+        <p-column field="actual" header={{matrics?.headers.actual}} [sortable]="true" sortField="chapterName">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{item[col.field] | number: '1.' }}
+            </ng-template>
+        </p-column>
+
+        <p-column field="goal" header={{matrics?.headers.goal}} [sortable]="true" sortField="goal">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{item[col.field] | number: '1.'}}
+            </ng-template>
+        </p-column>
+
+        <p-column field="percentage" header={{matrics?.headers.percentage}} [sortable]="true" sortField="percentage">
+            <ng-template let-col let-item="rowData" pTemplate="body">
+                {{item[col.field] | number: '1.'}}
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+    <button *ngIf="export" type="button" class="btn btn-info btn-sm float-right" (click)="exportCSV(dt)">Export to
+        CSV</button>
+</div>

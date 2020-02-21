@@ -1,0 +1,131 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<div class="tab-content" id="nav-membership">
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-xm-12 col-sm-12">
+            <div class="ui-inputgroup">
+                <input #search type="text" pInputText size="25" class="form-control" placeholder="Search">
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-xm-12 col-sm-12  col-lg-offset-2" style="font-weight:400">
+            **All Members list is as of latest Membership on {{maxRdate | date}}
+        </div>
+        <div class="col-lg-2 col-md-2 col-xm-12 col-sm-12">
+            <button *ngIf="sendMail" type="button" class=" btn btn-info btn-sm float-right" style="cursor:pointer" (click)="sendMailToMembers()">Send
+                a Mail</button>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <p-dataTable #dt [globalFilter]="search" [value]="membershipData" selectionMode="multiple" [scrollable]="true" scrollHeight="360px" [(selection)]="selected_member" [rows]="30" [paginator]="true" [responsive]="true" [headerCheckboxToggleAllPages]="true"
+            (onRowDblclick)="memberDetails($event)" (onRowSelect)="onRowSelect()" (onRowUnselect)="onRowUnselect()">
+            <p-column *ngIf="sendMail" [style]="{'width':'30px'}" selectionMode="multiple"></p-column>
+            <p-column field="firstName" header="First Name" [sortable]="true" sortField="firstName">
+                <ng-template let-col let-item="rowData" pTemplate="body" style="cursor: pointer;">
+                    {{ item[col.field] | titlecase }}
+                </ng-template>
+            </p-column>
+            <p-column field="lastName" header="Last Name" [sortable]="true" sortField="lastName">
+                <ng-template let-col let-item="rowData" pTemplate="body" style="cursor: pointer;">
+                    {{ item[col.field] | titlecase }}
+                </ng-template>
+            </p-column>
+            <p-column field="email" header="Email" [sortable]="true" sortField="email">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{ item[col.field] }}
+                </ng-template>
+            </p-column>
+            <p-column field="company" header="Company" [sortable]="true" sortField="company">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{item[col.field] }}
+                </ng-template>
+            </p-column>
+            <p-column field="status" header="Status" [sortable]="true" sortField="status">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    <span [ngStyle]="{ 'color':(item[col.field] === true || item[col.field] === 'ACTIVE'? 'green' : ( item[col.field] === false || item[col.field] === 'EXPIRED'?  'red' : 'blue')), 
+          'font-weight':'800'
+          }">
+                        {{ item[col.field] }}
+                    </span>
+                </ng-template>
+            </p-column>
+            <p-column field="expiryDate" header="Expiration" [sortable]="true" sortField="expiryDate">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{ item[col.field] | date: 'M/d/yyyy' }}
+                </ng-template>
+            </p-column>
+            <p-column field="memberSince" header="Sign-up" [sortable]="true" sortField="memberSince">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{item[col.field] | date: 'M/d/yyyy' }}
+                </ng-template>
+            </p-column>
+            <p-column field="dateProcessed" header="Date Processed" [sortable]="true" sortField="dateProcessed">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{item[col.field] | date: 'M/d/yyyy'}}
+                </ng-template>
+            </p-column>
+            <p-column field="guid" header="GUID" [sortable]="true" sortField="guid">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    <abbr title="{{item[col.field]}}">
+                        {{ (item[col.field].substring(0,9)+'...') }}
+                    </abbr>
+                </ng-template>
+            </p-column>
+            <p-column field="paymentType" header="Payment Type" [sortable]="true" sortField="paymentType">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{item[col.field] }}
+                </ng-template>
+            </p-column>
+            <p-column field="sponsershipCode" header="Promotional Code" [sortable]="true" sortField="sponsershipCode">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{item[col.field] }}
+                </ng-template>
+            </p-column>
+            <p-column field="emailBounced" header="Email Bounced" [sortable]="true" sortField="emailBounced">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{item[col.field] }}
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+
+        <button *ngIf="export" type="button" class="btn btn-info btn-sm float-right" (click)="exportCSV(dt)">Export to
+            CSV
+        </button>
+    </div>
+</div>
+
+<p-dialog header={{mail_box}} [(visible)]="sendMailDialog" width="1100" height="800">
+    <form #mailForm="ngForm" role="form" id="reused_form">
+
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Subject" id="demo" name="subject" name="subject" [(ngModel)]="subject" required maxlength="50" #sub="ngModel">
+            <div class="input-group-append">
+                <span class="input-group-text"><a class="custom-anchor" style="padding-right: 11px;"
+                        (click)="enableCC()">CC </a>
+                    <a class="custom-anchor" (click)="enableBCC()">BCC</a></span>
+            </div>
+        </div>
+        <p-chips [(ngModel)]="cc" placeholder="CC" name="ccAddresses" *ngIf="enableCCFlag">
+            <ng-template let-item pTemplate="item">
+                {{item}}
+            </ng-template>
+        </p-chips>
+
+        <p-chips [(ngModel)]="bcc" placeholder="BCC" name="bccAddresses" *ngIf="enableBCCFlag">
+            <ng-template let-item pTemplate="item">
+                {{item}}
+            </ng-template>
+        </p-chips>
+
+        <div class="form-group">
+            <label for="name">Message:</label>
+            <p-editor id="send-email-editor" [(ngModel)]="message" name="messageValue" [style]="{'height':'320px'}">
+            </p-editor>
+        </div>
+    </form>
+    <p-footer>
+        <button type="submit" class="btn btn-primary btn-info" [disabled]="!mailForm.form.valid" (click)="submitMail()">Send</button>
+    </p-footer>
+</p-dialog>
+
+<div *ngIf="memberView">
+    <em-member-view [memberData]="memberData"></em-member-view>
+</div>

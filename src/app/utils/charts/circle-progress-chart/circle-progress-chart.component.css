@@ -1,0 +1,21 @@
+.mid{
+	padding-top:0px;
+	text-align: center;
+}
+
+.progressCard{
+	height: 230px;
+    text-align-last: center;
+}
+
+.progressTitle{
+	padding:3%;
+	align-content: center;
+}
+
+/* .divider {
+	height: 1px;
+	margin: 9px 0;
+	overflow: hidden;
+	background-color: #1E90FF;
+  } */

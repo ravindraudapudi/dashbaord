@@ -1,0 +1,18 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<div id="revenue">
+  <label class=" px-3 card-title">{{selectedChapter | titlecase}} Chapter</label>
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xm-12">
+      <div class="card card-body">
+        <em-total-revenue-chart id="totalRevenueId" [config]='stackedConfig1' [totalRevenue]='totalRevenue'
+          (exportChart)="downloadChart()" [export]='export'></em-total-revenue-chart>
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xm-12">
+      <div class="card card-body">
+        <em-monthly-revenue-chart id="monthRevenueId" [config]='lineConfig' [lineData]='lineData'
+          (exportChart)="downloadMonthlyChart()" [export]='export'></em-monthly-revenue-chart>
+      </div>
+    </div>
+  </div>
+</div>

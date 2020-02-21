@@ -1,0 +1,30 @@
+::ng-deep .nvtooltip{
+    background-color: #354052;
+    color: white;
+    box-shadow: 0px 3px 9px rgba(0,0,0,.45);
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+    margin: 0px !important;
+    }
+    ::ng-deep .key{
+    font-size: 15px;
+    font-family: sans-serif;
+    font-weight: 600 !important
+    }
+    ::ng-deep .x-value{
+    font-size: 13px;
+    font-family: sans-serif;
+    font-weight: 600 !important
+    }
+
+
+    .downloadIcon {
+        margin-right: 20px;
+        position: absolute;
+        right: 0;
+        z-index: 1000;
+    }
+
+ 

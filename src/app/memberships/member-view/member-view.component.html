@@ -1,0 +1,103 @@
+<p-dialog header={{dialog_header}} appendToBody="true" [(visible)]="memberSnapDailog" [responsive]="true" showEffect="fade" [modal]="true" width="800" styleClass="memberDailog" id="snapView">
+    <div class="row">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Profile Photo and details -->
+                    <div class="row">
+                        <div class="col-3 profile-container">
+                            <img class="profileImage" src="../../../assets/images/icons/avatar.jpg" alt="Profile" />
+                        </div>
+                        <div class="col-9 profile">
+                            <label>{{ memberDetails.firstName + ' ' + memberDetails.lastName}}</label><br/>
+                            <label>{{ (memberDetails.professionalTitle || "Works" + " at " + memberDetails.company)}}</label><br/>
+                            <label>GUID:</label>&nbsp;<small>{{memberDetails.guid}}</small>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="content">
+                        <div><i class="fa fa-map-marker"></i>&nbsp;&nbsp;&nbsp;
+                            <label>Location</label>
+                        </div>
+                        <span>{{memberDetails.city}} {{memberDetails.country}}</span>
+
+                        <div><i class="fa fa-envelope"></i>&nbsp;
+                            <label>Email address</label></div>
+                        <span>{{memberDetails.email || memberDetails.alternateEmails}}</span>
+
+                        <div><i class="fa fa-phone"></i>&nbsp;&nbsp;
+                            <label>Phone</label></div>
+                        <span>{{memberDetails.mobile || memberDetails.phone}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <!-- Activity -->
+            <div class="card">
+                <div class="card-body">
+                    <label>Activity</label>
+                    <div class="divider"></div>
+                    <div class="activity">
+                        <span>Status :
+              <span [ngStyle]="{
+                'background-color':(memberDetails.status === 'ACTIVE') ? 'green' : 'red',
+                  'color': '#fafafa',
+                 'font-weight':'400',
+                 'border-radius': '10px',
+                 'padding': '1px 10px'
+                }">
+
+                  {{ memberDetails.status }}
+              </span>
+                        </span>
+                        <span>Member Since :
+            <span>{{memberDetails.memberSince | date: 'M/d/yyyy' }}</span>
+                        </span>
+                        <span>Expiration Date:
+              <!-- <span>{{(memberDetails.expirationDate !== null) ? (memberDetails.expirationDate | date) : 'N/A'}}</span> -->
+                        <span>{{memberDetails.expiryDate | date: 'M/d/yyyy'}}</span>
+                        </span>
+                        <span>Last Followup :
+            <span>{{memberDetails.lastFollowUp | date: 'M/d/yyyy' }}</span>
+                        </span>
+                        <span>Renewal Date :
+            <span>{{memberDetails.renewalDate | date: 'M/d/yyyy' }}</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!-- Events -->
+            <div class="card">
+                <div class="card-body">
+                    <label>Events </label>
+                    <div class="divider"></div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Past Event</label>
+                            <div class="row">
+                                <div class="col-8">
+                                    <span>April Fools Brunch</span>
+                                </div>
+                                <div class="col-4 float-right">
+                                    <span>April 1</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <label>Future Event</label>
+                            <div class="row">
+                                <div class="col-8">
+                                    <span>Dallas Meet and Greet</span>
+                                </div>
+                                <div class="col-4 float-right">
+                                    <span>Sept 19</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>

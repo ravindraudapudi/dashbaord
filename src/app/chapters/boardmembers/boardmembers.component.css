@@ -1,0 +1,11 @@
+.form-check, label {
+    font-size: 14px;
+    line-height: 1.42857;
+    color: #212121;
+    font-weight: 400;
+}
+
+.disableBoardMember {
+    pointer-events: none !important;
+    opacity: 0.5;
+}

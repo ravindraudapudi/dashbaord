@@ -1,0 +1,22 @@
+<p-dataTable #dt [value]="workFlowInputs" selectionMode="single" id="work-flow" class="boardMember">
+    <p-column field="personName" header="Person Name">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field] }}
+        </ng-template>
+    </p-column>
+    <p-column field="stage" header="Stage" [sortable]="true">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+           <span
+           style="padding: 4px 14px;
+           border-radius: 11px;
+           font-size: 11px;
+           box-shadow: darkgrey 1px 1px 2px;"
+           [ngStyle]="{backgroundColor:item?.stages?.stageColor}">{{item[col.field]}}</span> 
+        </ng-template>
+    </p-column>
+    <p-column field="followUpDate" header="Follow Up Date">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field] | date: 'MM/dd/yyyy'}}
+        </ng-template>
+    </p-column>
+</p-dataTable>

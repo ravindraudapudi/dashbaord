@@ -1,0 +1,17 @@
+
+ tbody tr td {
+ text-align: left;
+}
+
+.members-cells{
+    text-align-last:left !important;
+}
+
+.total-column{
+    font-weight: 500;
+    color: #222222!important;
+    background-color: #fafafb !important;
+     border-color: silver;
+}
+
+/* ::ng-deep */

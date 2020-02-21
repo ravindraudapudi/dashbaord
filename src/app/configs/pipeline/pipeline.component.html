@@ -1,0 +1,91 @@
+<div class="row">
+    <div class="col-sm-12">
+        <button type="submit" class="btn btn-info btn-sm float-right" (click)="showDialog('Add Stage', true)" [disabled]="viewOpportunity">Add Stage</button>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <p-dataTable [value]="stages" selectionMode="single" [rows]="10" [paginator]="false" [responsive]="true" [scrollable]="true" scrollHeight="400px" id="config" class="chapter-config">
+            <p-column field="stage" header="Stage" [sortable]="true" sortField="stage">
+
+            </p-column>
+            <p-column field="description" header="Description" [sortable]="true" sortField="description">
+            </p-column>
+            <p-column field="orderId" header="Stage Order" [sortable]="true" sortField="orderId">
+            </p-column>
+            <p-column field="stageColor" header="Color" [sortable]="true" sortField="stageColor">
+            </p-column>
+            <p-column field="membershipRevenue" header="Action" [style]="{'overflow-x': 'auto','padding':'10px','text-align':'left'}">
+                <ng-template let-rowUser="rowData" pTemplate="body">
+                    <i class="fa fa-edit" [ngClass]="{'disableOpportunity':viewOpportunity}" style="cursor:pointer; color:grey ; padding :8px" (click)="editStage(rowUser)" pTooltip="Edit"></i>
+                    <i class="fa fa-trash" [ngClass]="{'disableOpportunity':viewOpportunity}" style="cursor:pointer;color:red" (click)="confirmation(rowUser)" pTooltip="delete"></i>
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+    </div>
+</div>
+
+<p-dialog header={{dialogeHead}} appendTo="body" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" width="420" [contentStyle]="{'max-height':'350px'}" styleClass="active">
+    <div class="row">
+        <div class="col-md-12" style="text-align: center">
+            <label style="color: #f32e39 !important; align-content: center; font-size: 14px; font-weight: 600">{{errorMessage}}</label>
+        </div>
+    </div>
+    <div class="ui-g ui-fluid">
+        <form #stageForm="ngForm">
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label class="label" for="stage">Stage:</label>
+                </div>
+                <div class="ui-g-6">
+                    <input type="text" class="form-control" name="stage" maxlength="40" [(ngModel)]="model.stage" required #stageInput="ngModel" />
+                    <div *ngIf="stageInput.invalid">
+                        <span class="chapter" [hidden]="!stageInput.touched ">
+                            <small>{{stageAlert}}</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label class="label" for="description">Description</label>
+                </div>
+                <div class="ui-g-6">
+                    <input type="text" class="form-control" [(ngModel)]="model.description" name="description" maxlength="200" #description="ngModel" required />
+                    <div *ngIf="description.invalid">
+                        <span class="chapter" [hidden]="!description.touched ">
+                            <small>{{descriptionAlert}}</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label class="label" for="orderId">Order Number:</label>
+                </div>
+                <div class="ui-g-6">
+                    <input type="text" class="form-control" name="orderId" maxlength="5" [(ngModel)]="model.orderId" required #orderId="ngModel" [pKeyFilter]="numberExp" />
+                    <div *ngIf="orderId.invalid">
+                        <span class="chapter" [hidden]="!orderId.touched ">
+                            <small>{{OrderAlert}}</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label class="label" for="stageColor">Stage color:</label>
+                </div>
+                <div class="ui-g-6">
+                    <input type="color" class="form-control" name="stageColor" [(ngModel)]="model.stageColor" #stageColorInput="ngModel" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" *ngIf="addButton" class="btn btn-info btn-sm float-right" [disabled]="(!stageForm.valid)" (click)="saveStage(stageForm.value)">Save Stage </button>
+            <button type="button" *ngIf="!addButton" class="btn btn-info btn-sm float-right" [disabled]="!stageForm.valid" (click)="updateStage(stageForm.value)">Update Stage</button>
+        </div>
+    </p-footer>
+</p-dialog>
+<p-confirmDialog header={{confirmHead}} styleClass="pipelineDialog" appendTo="body" icon="pi pi-exclamation-triangle" width="425"></p-confirmDialog>

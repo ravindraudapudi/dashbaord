@@ -1,0 +1,42 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<div id="socialMedia" class="px-3">
+  <label class="card-title">Ascend {{selectedChapter | titlecase}} Chapter</label>
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xm-12">
+      <div class="card card-body">
+        <em-social-media id="Distribution" *ngIf="socialMedia" [config]='distrubutionConfig' [socialMedia]="socialMedia['Distribution List of Professional Group']"
+          [primaryGroupCode]='primaryGroupCode' (exportChart)="downloadChart('Distribution','Distribution List of Professionals Group')" [export]='export'></em-social-media>
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xm-12">
+      <div class="card card-body">
+        <em-social-media id="Facebook" *ngIf="socialMedia" [config]='socialMediaConfig' [socialMedia]="socialMedia['Facebook Page Likes']"
+          [primaryGroupCode]='primaryGroupCode' (exportChart)="downloadChart('Facebook','Facebook Page Likes')" [export]='export'></em-social-media>
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xm-12">
+      <div class="card card-body">
+        <em-social-media id="Linkedin" *ngIf="socialMedia" [config]='socialMediaConfig' [socialMedia]="socialMedia['LinkedIn Page Followers']"
+          [primaryGroupCode]='primaryGroupCode' (exportChart)="downloadChart('Linkedin','LinkedIn Page Followers')" [export]='export'></em-social-media>
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xm-12">
+      <div class="card card-body">
+        <em-social-media id="Instagram" *ngIf="socialMedia" [config]='socialMediaConfig' [socialMedia]="socialMedia['Instagram Followers']"
+          [primaryGroupCode]='primaryGroupCode' (exportChart)="downloadChart('Instagram',' Instagram Followers')" [export]='export'></em-social-media>
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xm-12">
+      <div class="card card-body">
+        <em-social-media id="LinkedInGroup" *ngIf="socialMedia" [config]='socialMediaConfig' [socialMedia]="socialMedia['LinkedIn Group Members']"
+          [primaryGroupCode]='primaryGroupCode' (exportChart)="downloadChart('LinkedInGroup','LinkedIn Group Members')" [export]='export'></em-social-media>
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xm-12">
+      <div class="card card-body">
+        <em-social-media id="Twitter" *ngIf="socialMedia" [config]='socialMediaConfig' [socialMedia]="socialMedia['Twitter Followers']"
+          [primaryGroupCode]='primaryGroupCode' (exportChart)="downloadChart('Twitter','Twitter Followers')" [export]='export'></em-social-media>
+      </div>
+    </div>
+  </div>
+</div>

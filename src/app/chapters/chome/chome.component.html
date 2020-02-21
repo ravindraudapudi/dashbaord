@@ -1,0 +1,70 @@
+<nav id="menu">
+    <div class="nav nav-tabs tab-menu" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="nav-chapters-tab" data-toggle="tab" role="tab" aria-controls="nav-chapters" aria-selected="true">
+            <i class="fa fa-list-ul"></i>
+            <span class="nav-text">
+                Chapters
+            </span>
+            <div class="triangle-down"></div>
+        </a>
+
+        <div class="drop-down-label">
+            <label style="color: white;">Reporting Date&nbsp;&nbsp;</label>
+            <select [(ngModel)]="selectedDate" (change)="selectedDateValue()" class = "report-date-selector">
+              <option *ngFor="let rDate of selectedValue?.csvLog" class = "report-date-option">
+                {{rDate.reportingDate }}</option>
+            </select>
+          </div>
+      
+          <label class="rDate-drop-down-label">
+            <label style="color: white;">Fiscal Year&nbsp;&nbsp;</label>
+            <select [(ngModel)]="selectedValue" (change)="selectedFiscalYear(selectedValue)" class = "report-date-selector"
+              [compareWith]="compareByID">
+              <option *ngFor="let fiscalYear of fiscalYears" [ngValue]="fiscalYear" [selected]="fiscalYear == selectedValue" class = "report-date-option" >
+                {{fiscalYear.fiscaYear }}</option>
+            </select>
+          </label>
+          
+    </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+    <div class="container-fluid">
+        <div class="card-tab">
+            <nav id="submenu">
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link text dropdown dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" aria-controls="nav-total-membership" aria-selected="true" role="tab" aria-haspopup="true" aria-expanded="false" style="color:#FFA500">{{selectedChapter | titlecase}}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown" [routerLink]="[routingUrl, selectedCode]">
+                        <li *ngFor="let chapter of chapters">
+                            <a class="dropdown-item" [ngClass]="{'chapter-active' : selectedChapter == chapter.chapterName}" (click)="dropdownChapterData(chapter)">
+                                {{chapter.chapterName | titlecase}}</a>
+                        </li>
+                    </div>
+
+                    <a *ngIf="viewOverview" class="nav-item nav-link text" id="overview" data-toggle="tab" role="tab" (click)="showReportingDate('overview')" aria-controls="nav-overview" aria-selected="false" [routerLink]="[routingUrl,selectedCode]" routerLinkActive="active">Overview</a>
+
+                    <a *ngIf="viewMemberships" class="nav-item nav-link text" id="membership" data-toggle="tab" role="tab" (click)="showReportingDate('membership')" aria-controls="nav-membership" aria-selected="false" [routerLink]="['./membership',selectedCode]" routerLinkActive="active">Membership</a>
+
+                    <a *ngIf="viewDetailMetrics" class="nav-item nav-link text" id="metrics" data-toggle="tab" role="tab" (click)="showReportingDate('metrics')" aria-controls="nav-metrics" aria-selected="false" [routerLink]="['./metrics',selectedCode]" routerLinkActive="active">Detail
+                        Metrics</a>
+
+                    <a *ngIf="viewRevenue" class="nav-item nav-link text" id="revenue" data-toggle="tab" role="tab" (click)="showReportingDate('revenue')" aria-controls="nav-revenue" aria-selected="false" [routerLink]="['./revenue',selectedCode]" routerLinkActive="active">Revenue</a>
+
+                    <a *ngIf="viewBoardMember" class="nav-item nav-link text" id="boardMembers" data-toggle="tab" role="tab" (click)="showReportingDate('boardMembers')" aria-controls="nav-revenue" aria-selected="false" [routerLink]="['./boardMembers',selectedCode]" routerLinkActive="active">Board Members</a>
+
+                    <a *ngIf="viewSocialMedia" class="nav-item nav-link text" id="boardMembers" data-toggle="tab" role="tab" (click)="showReportingDate('boardMembers')" aria-controls="nav-metrics" aria-selected="false" [routerLink]="['./social',selectedCode]" routerLinkActive="active">Social Media</a>
+
+                    <a *ngIf="viewSponsor" class="nav-item nav-link text" id="sponsorship" data-toggle="tab" role="tab" (click)="showReportingDate('sponsorship')" aria-controls="nav-sponsorship" aria-selected="false" [routerLink]="['./sponsorship',selectedCode]" (click)="setUpReportFlag('sponsorship')"
+                        routerLinkActive="active">Sponsorship Reports</a>
+
+                    <a *ngIf="viewOpportunity" class="nav-item nav-link text" id="sponsorship" data-toggle="tab" role="tab" (click)="showReportingDate('sponsorship')" aria-controls="nav-sponsorship" aria-selected="false" [routerLink]="['./pipeline',selectedCode]" routerLinkActive="active">Sponsorship Pipeline</a>
+                </div>
+            </nav>
+            <div class="scrollbar" id="fluid-scroll">
+                <div class="force-overflow">
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

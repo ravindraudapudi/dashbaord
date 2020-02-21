@@ -1,0 +1,62 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<div class="tab-content" id="nav-tabContent">
+    <div class="container-fluid">
+        <div class="card-tab">
+            <nav id="submenu">
+
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+
+                    <a *ngIf="viewTotalActiveMembers" class="nav-item nav-link text active" id="total-membership" data-toggle="tab" (click)="showReportingDate('total-membership')" aria-controls="nav-total-membership" aria-selected="true" role="tab" (click)="showMetrics('TM')">Total
+                        Active</a>
+
+                    <a *ngIf="viewPaidMembers" class="nav-item nav-link text" id="paid-membership" data-toggle="tab" role="tab" (click)="showReportingDate('paid-membership')" aria-controls="nav-paid-membership" aria-selected="false" (click)="showMetrics('PM')">Member-Paid</a>
+
+                    <a *ngIf="viewLocalSponsoredMembers" class="nav-item nav-link text" id="sponsored-membership" data-toggle="tab" role="tab" (click)="showReportingDate('sponsored-membership')" aria-controls="nav-sponsored-membership" aria-selected="false" (click)="showMetrics('LSM')">Local Sponsor-Paid</a>
+
+                    <a *ngIf="viewNationalSponsoredMembers" class="nav-item nav-link text" id="national-sponsored-membership" data-toggle="tab" role="tab" (click)="showReportingDate('national-sponsored-membership')" aria-controls="nav-sponsored-membership" aria-selected="false"
+                        (click)="showMetrics('NSM')">National
+                        Sponsor-Paid</a>
+
+                    <a *ngIf="viewTotalrevenue" class="nav-item nav-link text" id="membership-revenue" data-toggle="tab" role="tab" (click)="showReportingDate('membership-revenue')" aria-controls="nav-national-sponsored-membership" aria-selected="false" (click)="showMetrics('MR')">Total
+                        Revenue</a>
+
+                    <a *ngIf="enableSponsor" class="nav-item nav-link text" id="membership-revenue" data-toggle="tab" role="tab" (click)="showReportingDate('National-Sponsorship')" aria-controls="nav-national-sponsorship-membership" aria-selected="false" (click)="showMetrics('NS')">Sponsorship Reports</a>
+                    <a  *ngIf="enableOppportunities" (click)="showReportingDate('National-Sponsorship-pipline')" class="nav-item nav-link text" id="membership-revenue" data-toggle="tab" role="tab" aria-controls="nav-national-sponsorship-membership" aria-selected="false" (click)="showMetrics('NSP')">Sponsorship Pipeline</a>
+                </div>
+            </nav>
+            <div class="scrollbar" id="fluid-scroll">
+                <div class="force-overflow table-top px-3">
+                    <div *ngIf="_metricsToShow !== 'NSP'">
+                    </div>
+                    <div *ngIf="_metricsToShow=='TM'">
+                        <em-active-membership *ngIf="totalActiveMembers" [selectedRDate]="selectedRDate" [export]='export' [selectedRDate]="selectedRDate" [year]="year" [totalActiveMembers]="totalActiveMembers">
+                        </em-active-membership>
+                    </div>
+                    <div *ngIf="_metricsToShow=='PM'">
+                        <em-paid-membership *ngIf="paidMembers" [export]='export' [paidMembers]="paidMembers" [selectedRDate]="selectedRDate" [year]="year"></em-paid-membership>
+                    </div>
+                    <div *ngIf="_metricsToShow=='LSM'">
+                        <em-local-sponsored-membership *ngIf="localSponsoredDetails" [export]='export' [selectedRDate]="selectedRDate" [year]="year" [localSponsoredDetails]="localSponsoredDetails">
+                        </em-local-sponsored-membership>
+                    </div>
+                    <div *ngIf="_metricsToShow=='NSM'">
+                        <em-national-sponsored-membership *ngIf="nationalSponsored" [export]='export' [selectedRDate]="selectedRDate" [year]="year" [nationalSponsored]="nationalSponsored">
+                        </em-national-sponsored-membership>
+                    </div>
+                    <div *ngIf="_metricsToShow=='MR'">
+                        <em-membership-revenue *ngIf="revenueDetails" [export]='export' [revenueDetails]="revenueDetails">
+                        </em-membership-revenue>
+                    </div>
+                    <div *ngIf="_metricsToShow=='NS'">
+                        <em-national-sponsorship>
+                        </em-national-sponsorship>
+                    </div>
+                    <div *ngIf="_metricsToShow=='NSP'">
+                        <em-national-sponsorship-pipeline>
+                        </em-national-sponsorship-pipeline>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,108 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<div class="tab-content" id="nav-tabContent">
+    <div class="scrollbar px-3" id="fluid-scroll" style="margin-top: 100px !important;">
+        <div class="card-tab force-overflow">
+            <div class="row">
+                <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col-md-6" [ngStyle]="{'color':errorFlag ? 'red' : '#04a111c4'}">
+                                    {{uploadMessage}}
+                                </div>
+
+                                <div class="col-md-6">
+                                    <span style="float:right"><b>Last uploaded on: {{lastUploadedDate}}</b></span><br>
+                                </div>
+                            </div>
+
+                            <h5 class="card-title">
+                                <div class="input-group">
+                                    <select class="form-control" [(ngModel)]="selectedValue" (change)="dropemitvalue()" required>
+                    <option hidden value="" disabled selected>Select Category</option>
+                    <option *ngFor="let data of dropDownData">{{data.name}}</option>
+                  </select>
+                                </div>
+                                <div class="input-group" style="padding-top: 20px" *ngIf="enableCalendar">
+                                    <p-calendar placeholder="Reporting Date" [(ngModel)]="dateValue"></p-calendar>
+                                </div>
+
+                                <div class="input-group" *ngIf="uploadPLFlag">
+                                    <select class="form-control" #chapterSelection (change)="initilizeChapters();retrivechapter(chapterSelection.value)" required>
+                    <option hidden value="" disabled selected>Select Chapter</option>
+                    <option *ngFor="let data of dropDownChaptersData" [value]="data.primaryGroupCode">{{data.chapterName | titlecase}}</option>
+                  </select>
+                                </div>
+
+                                <div class="input-group" *ngIf="uploadPLFlag">
+                                    <select class="form-control" #fiscalyear (change)="initilizeChapters();retriveFiscalYear(fiscalyear.value)" required>
+                    <option hidden value="" disabled selected>Select fiscal year</option>
+                    <option *ngFor="let data of dropDownfiscalYearssData" [value]="data">{{data}}</option>
+                  </select>
+                                </div>
+                            </h5>
+
+                            <form class="md-form justify-content-center">
+                                <div class="file-field">
+                                    <div class="z-depth-1-half mb-4 d-flex justify-content-center">
+                                        <img src="/assets/images/upload.png" class="img-fluid avatar-pic" alt="Upload CSV">
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <span class="btn btn-info btn-file btn-sm">
+                      Add New Files<input name="file" id="fileInput" type="file" accept=".csv, application/vnd.ms-excel,.xls,.xlsx"
+                      (change)='onFileChange($event)' (change)='validateFile($event)' (change)='readingCSV(input)' #input>
+                       
+                    </span>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <label class="danger" style="position: absolute" *ngIf="uploadError">{{uploadError}}</label>
+                                        <label style="position: absolute" *ngIf="fileName">{{fileName}}</label>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <div class="uploadButton">
+                                <button type="button" class="btn btn-info btn-sm float-right" (click)="cancel()">Clear</button>
+                                <button type="button" class="btn btn-info btn-sm float-right" (click)="uploadCSV()">Upload</button>
+                            </div>
+                            <!-- [disabled]="!(selectedCategory && chooseFile )" -->
+                        </div>
+                        <span><b>
+                <span style="color:red ">* </span>Instructions:</b>
+                        <div style="padding-left:60px">
+                            <li><i style="color:black"> Please remove comma's before uploading file.</i></li>
+                            <li><i style="color:black"> Upload files in CSV format only.</i></li>
+                            <li><i style="color:black"> The date format should be M/d/yyyy</i></li>
+                        </div>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-sm-6" *ngIf="selectedCategory">
+                    <div class="card card-column-outer">
+                        <div class="card-body">
+                            <h5 class="card-title">Following columns are required for <span style='color:orange'>{{selectedFileName}}</span></h5>
+                            <div class="card-column-inner">
+                                <li *ngFor="let columns of mandatoryElements">
+                                    {{ columns }}
+                                </li>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="uploadClicked">
+                    <div class="card card-column-outer">
+                        <div class="card-body">
+                            <h5 class="card-title">Below columns are not present in <span style='color:orange'>{{selectedFileName}}</span></h5>
+                            <div class="card-column-inner">
+                                <li *ngFor="let columns of isFileValidated">
+                                    {{ columns }}
+                                </li>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,75 @@
+/*.card-bg{
+    background-color: #31464c;
+  }
+  
+  .sign-in{
+    color:cornsilk;
+    padding: 6% 0% 0% 0%;
+    font-size: 25px;
+    font-family: sans-serif;
+    font-weight: 600;
+  }
+  .pb-5 {
+    padding-bottom: 3rem!important;
+    padding-top: 4rem !important;
+  }
+  
+   .main-background{
+    height:-webkit-fill-available;
+    padding:0px!important;
+    background-image: url('/assets/images/ascend-bg.jpg');
+    background-position: center center;
+    background-size: cover;
+  } */
+    
+  .cursor{
+    cursor:pointer;
+  }
+  
+  .field-icon {
+    float: right;
+    margin-left: -25px;
+    margin-top: 0px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .container{
+    min-width: 400px;
+    max-width: 500px;
+    min-height: 300px;
+    vertical-align: middle;
+    margin: 100px auto;
+    border-radius: 5px;
+    background-color: #31464c !important;
+  }
+
+  .pb-5 {
+    padding-bottom: 1rem!important;
+  }
+  
+  .panel-right{
+    color:cornsilk;
+    padding: 6% 0% 0% 3%;
+    font-size: 25px;
+    font-family: sans-serif;
+    font-weight: 600;
+    background-color: #31464c !important;
+  }
+  
+  .form-control {
+    color: #fff !important;
+    border-color: white !important;
+  }
+  
+  .input-group-text {
+    color: white !important;
+  }
+  
+  /* .main-background {
+    height:-webkit-fill-available;
+    padding:0px!important;
+    background-image: url('/assets/images/ascend-bg.jpg');
+    background-position: center center;
+    background-size: cover;
+  } */

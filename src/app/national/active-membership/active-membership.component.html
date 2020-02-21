@@ -1,0 +1,74 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<p-table #dt [columns]="colsForTable" [value]="dataForTable" [rowsPerPageOptions]="[2,4,6]" [paginator]="false" [rows]="10" id="TAM">
+    <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+            <col *ngFor="let col of columns">
+        </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [ngClass]="'table-color'">
+            <td *ngFor="let col of columns" (click)="onRowSelect(rowData['primaryGroupCode'],rowData['chapterName'])">
+                {{rowData[col.field]}}
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-table #dt1 [columns]="colsForTable" [value]="totalValue" [rowsPerPageOptions]="[2,4,6]" [paginator]="false" [rows]="10" id="TAM">
+    <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+            <col *ngFor="let col of columns">
+        </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [ngClass]="'table-color'" class="total-column">
+            <td *ngFor="let col of columns">
+                {{rowData[col.field]}}
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+
+<button *ngIf="export" type="button" class="btn btn-info btn-sm float-right" (click)="exportCSV(dt)">Export to
+    CSV</button>
+
+<label class="card-title" style="padding-top: 14px;" *ngIf="chapterClicked">Total active Members for {{chapterName | titlecase }}
+</label>
+<!-- <p-table #totaldt class="memberDetails" [value]="totalActiveMembersDetails" *ngIf="chapterClicked" [rowsPerPageOptions]="[2,4,6]" [paginator]="true" [rows]="10" [scrollable]="true" scrollHeight="320px"> -->
+<p-table #totaldt class="memberDetails" [value]="totalActiveMembersDetails" *ngIf="chapterClicked" [rows]="10" [scrollable]="true" scrollHeight="320px">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Api Guid</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Member sign up date</th>
+            <th>Expiration</th>
+            <th>Membership Type</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-members>
+        <tr>
+            <td class="members-cells">{{members.apiGuid}}</td>
+            <td class="members-cells">{{members.firstName}}</td>
+            <td class="members-cells">{{members.lastName}}</td>
+            <td class="members-cells">{{members.email}}</td>
+            <td class="members-cells">{{members.registrationDate | date: 'MM/dd/yyyy' }} </td>
+            <td class="members-cells">{{members.expiryDate | date: 'MM/dd/yyyy'}} </td>
+            <td class="members-cells">{{members.membership}}</td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<button *ngIf="export && chapterClicked" type="button" class="btn btn-info btn-sm float-right" (click)="exportMembersCSV(totaldt)">Export to CSV</button>

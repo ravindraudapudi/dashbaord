@@ -1,0 +1,123 @@
+.footer-bar {
+    position: relative;
+    display: inline;
+    top: 90%;
+    /* border: 1px solid #D5D5D5; */
+    padding: 3px;
+    text-align: right;
+}
+
+.footer-bar fa {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.footer-bar .fa {
+    cursor: pointer;
+}
+
+.fy-dropdown label {
+    margin: 0px 0px 15px -13px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.custom-table tbody>tr>td {
+    padding: 12px 8px;
+    vertical-align: middle;
+    width: 83px !important;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: right;
+    color: black;
+}
+
+.custom-table tbody {
+    border: 2px solid #a9a5a5;
+}
+
+.custom-search {
+    padding: 10px;
+    margin-left: 24px;
+}
+
+.drop-down-partnership {
+    margin-top: 24px;
+}
+
+.search-container {
+    padding-left: 14px;
+    padding-right: 14px;
+}
+
+.disableOpportunity {
+    pointer-events: none !important;
+    opacity: 0.5;
+}
+
+.calendar-control-label {
+    font-family: 'Roboto', 'Arial', 'Helvetica', 'sans-serif' !important;
+    font-size: 12px!important;
+    color: #000000!important;
+}
+
+.buttonStyle {
+    color: #e02a2a;
+    border: none;
+    cursor: pointer;
+}
+
+.col-custom {
+    width: 6px;
+}
+
+.disableOpportunity {
+    cursor: not-allowed !important;
+    opacity: 0.5;
+}
+
+.legnd {
+    font-size: 12px;
+}
+
+.legnd-head {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.legnd-body {
+    font-weight: 400;
+    letter-spacing: 0.2px;
+}
+
+.label-required:after {
+    content: " *";
+    color: red;
+}
+
+.card {
+    font-size: 14px;
+    font-weight: 400;
+    background-color: #ececec;
+    /* padding-left: 22px; */
+}
+
+span {
+    padding: 10px 0px 0px 22px;
+}
+
+.contract-terms-custom {
+    font-weight: 400 !important;
+    font-size: 14px;
+}
+
+.card {
+    background-color: white;
+    border: solid lightgrey;
+    border-radius: 1px;
+}
+
+.custom {
+    background-color: gainsboro;
+}

@@ -1,0 +1,137 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12" *ngIf="createChap">
+        <button type="submit" class="btn btn-info btn-sm float-right" (click)="showDialog()">Add Chapter</button>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="mt-2" *ngIf="!createChap"></div>
+        <p-dataTable [value]="dataForTable" selectionMode="single" [rows]="10" [paginator]="false" [responsive]="true" id="config" class="chapter-config" [scrollable]="true" scrollHeight="450px">
+            <p-column field="chapterName" header="Chapter Name" [sortable]="true" sortField="chapterName">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{ item[col.field] | titlecase }}
+                </ng-template>
+            </p-column>
+            <p-column field="type" header="Chapter Type" [sortable]="true" sortField="type">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{ item[col.field] | titlecase }}
+                </ng-template>
+            </p-column>
+            <p-column field="associatedWith" header="Associated Chapter code" [sortable]="true" sortField="associatedWith">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{ item[col.field] | uppercase }}
+                </ng-template>
+            </p-column>
+
+            <p-column field="primaryGroupCode" header="Primary Group Code" [sortable]="true" sortField="primaryGroupCode">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{ item[col.field] | uppercase }}
+                </ng-template>
+            </p-column>
+            <p-column field="chapterEmail" header="Chapter Email" [sortable]="true" sortField="chapterEmail">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    {{ item[col.field] }}
+                </ng-template>
+            </p-column>
+
+            <p-column field="membershipRevenue" header="Action" [style]="{'overflow-x': 'auto','padding':'10px','text-align':'left'}">
+                <ng-template let-rowUser="rowData" pTemplate="body">
+                    <i class="fa fa-edit" style="cursor:pointer; color:grey ; padding :8px" (click)="editChapter(rowUser)" pTooltip="Edit"></i>
+                    <i class="fa fa-trash" style="cursor:pointer;color:red" (click)="confirmation(rowUser)" pTooltip="delete"></i>
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+    </div>
+</div>
+<p-dialog header={{dialogeHead}} appendTo="body" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" width="420" [contentStyle]="{'max-height':'350px'}" styleClass="active">
+    <div class="ui-g ui-fluid" *ngIf="chapter">
+        <form [formGroup]="chapterForm">
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label class="label" for="chapterName" class="label-required">Chapter Name:</label>
+                </div>
+                <div class="ui-g-6">
+                    <input type="text" class="form-control" [pKeyFilter]="noSpecial" formControlName="chapterName" name="chapterName" maxlength="40" />
+                    <div>
+                        <span class="chapter" *ngIf="!chapterForm.controls['chapterName'].valid && chapterForm.controls['chapterName'].touched">
+                            <small>{{chapterNameAlert}}</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label class="label" for="type" class="label-required">Type:</label>
+                </div>
+                <div class="ui-g-6">
+                    <p-dropdown [options]="chapterType" formControlName="type" appendTo="body" (onChange)="selectType($event)" name="type" [ngClass]="form-control" [style]="{'width': '100%','text-transform': 'capitalize', 'padding': '0.35em'}" placeholder="--Select--">
+                    </p-dropdown>
+                    <div>
+                        <span class="danger" *ngIf="!chapterForm.controls['type'].valid && chapterForm.controls['type'].touched">
+                            <small>{{chapterTypeAlert}}</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!-- *ngIf='!editChapterdetails' -->
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label class="label" for="primaryGroupCode" class="label-required">Primary Group Code:</label>
+                </div>
+                <div class="ui-g-6">
+                    <input type="text" class="form-control" pKeyFilter="alpha" formControlName="primaryGroupCode" name="primaryGroupCode" required />
+                    <div>
+                        <span class="danger" *ngIf="!chapterForm.controls['primaryGroupCode'].valid && chapterForm.controls['primaryGroupCode'].touched">
+                            <small>{{primaryGroupCodeAlert}}</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-g-12" *ngIf="isAssociated">
+                <div class="ui-g-6">
+                    <label class="label" for="associatedWith" class="label-required">Associated Chapter Code:</label>
+                </div>
+                <div class="ui-g-6">
+                    <input type="text" #code name="code" class="form-control" pKeyFilter="alpha" formControlName='associatedWith' />
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label class="label" for="chapterEmail" class="label-required">Chapter Email:</label>
+                </div>
+                <div class="ui-g-6">
+                    <input type="text" autocomplete="off" class="form-control" formControlName="chapterEmail" name="chapterEmail" pattern="^[a-zA-Z0-9.!#$%&amp;'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,63})*$" />
+                    <!-- pattern="^[a-zA-Z0-9.-_]{1,64}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" -->
+                    <div>
+                        <span class="danger" *ngIf="!chapterForm.controls['chapterEmail'].valid && chapterForm.controls['chapterEmail'].touched">
+                            <small>{{chapterEmailAlert}}</small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <label class="label" for="chapterPassWord" class="label-required">Email password:</label>
+                </div>
+                <div class="ui-g-6">
+                    <input type="password" autocomplete="new-password" class="form-control" formControlName="chapterPassWord" name="chapterPassWord" />
+                    <div>
+                        <span class="danger" *ngIf="!chapterForm.controls['chapterPassWord'].valid && chapterForm.controls['chapterPassWord'].touched">
+                            <small>{{chapterPasswordAlert}}</small>
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" *ngIf="addButton" class="btn btn-info btn-sm float-right" [disabled]="(!chapterForm.valid)" (click)="addChapter(chapterForm.value)">Save Chapter </button>
+            <button type="button" *ngIf="updateButton" class="btn btn-info btn-sm float-right" [disabled]="!chapterForm.valid" (click)="updateChapter(chapterForm.value)">Update Chapter</button>
+        </div>
+    </p-footer>
+</p-dialog>
+<p-confirmDialog header={{confirmHead}} appendTo="body" icon="pi pi-exclamation-triangle" width="425"></p-confirmDialog>

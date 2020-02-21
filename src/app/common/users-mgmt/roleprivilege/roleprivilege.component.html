@@ -1,0 +1,48 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<div class="form-group">
+  <div class="row">
+    <div class="col-md-6 col-lg-6 col-sm-12 col-xm-12">
+      <form>
+        <div class="input-group">
+          <input type="text" name="formRole" id="formRole" class="form-control" [(ngModel)]="selRole"
+            placeholder="New Role:" aria-label="role" aria-describedby="button-role" required />
+          <div class="input-group-append">
+            <button *ngIf="enableUpdate" class="btn btn-info addon btn-sm" style="margin-top: 4px; z-index: 1;"
+              type="button" id="button-role" (click)="addRole(selRole)">Add</button>
+            <button *ngIf="!enableUpdate" class="btn btn-info addon btn-sm" style="margin-top: 4px; z-index: 1;"
+              type="button" id="button-role" (click)="updateRole(selRole)">Rename</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row border border-info rounded role">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+      <label class="label head">Roles</label>
+      <div *ngFor="let role of roles">
+        <p-radioButton *ngIf="role.role" name="group1" value="{{role.role}}" label="{{role.role | uppercase}}"
+          [(ngModel)]="selectedRole" (click)="getPrevilagesForRole(role)">
+        </p-radioButton>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
+      <span *ngIf="flag">
+        <label class="label head">Privileges</label>
+        <div class="switch-field">
+          <input type="radio" id="radio-one" name="switch-one" [(ngModel)]="selectedView" value="National"
+            (ngModelChange)="getPrivilege()" />
+          <label for="radio-one">National</label>
+          <input type="radio" id="radio-two" name="switch-one" [(ngModel)]="selectedView" value="Chapter"
+            (ngModelChange)="getPrivilege()" />
+          <label for="radio-two">Chapter</label>
+        </div>
+      </span>
+      <div class="custom-control custom-checkbox" *ngFor="let privilege of privileges">
+        <input type="checkbox" name="{{privilege}}" class="custom-control-input" id="{{privilege}}"
+          [ngModel]="selectedPrivilages.indexOf(privilege) !== -1" (ngModelChange)="selectedPrivilegeList(privilege)" />
+        <label class="custom-control-label checkbox-label" for="{{privilege}}">{{ privilege }}</label>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-info btn-sm float-right" (click)="submitForm()">Submit</button>
+</div>

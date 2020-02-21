@@ -1,0 +1,33 @@
+<p-dataTable #dt [value]="nationalContactsInputs" selectionMode="single" [responsive]="true" id="national-contacts" class="boardMember">
+    <p-column field="fullName" header="Contact Name">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field] }}
+        </ng-template>
+    </p-column>
+    <p-column field="role" header="Role">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field]}}
+        </ng-template>
+    </p-column>
+    <!-- <p-column field="company" header="Company">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field]}}
+        </ng-template>
+    </p-column> -->
+    <p-column field="email" header="Email">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field]}}
+        </ng-template>
+    </p-column>
+    <p-column field="phone" header="Phone#">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field]}}
+        </ng-template>
+    </p-column>
+
+    <p-column field="other" header="Other">
+        <ng-template let-col let-item="rowData" pTemplate="body">
+            {{item[col.field]}}
+        </ng-template>
+    </p-column>
+</p-dataTable>

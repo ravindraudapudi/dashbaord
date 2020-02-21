@@ -1,0 +1,58 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<div class="tab-content" id="nav-tabContent">
+    <div class="container-fluid">
+        <div class="card-tab">
+            <nav id="submenu">
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link text dropdown dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" aria-controls="nav-total-membership" aria-selected="true" role="tab" aria-haspopup="true" aria-expanded="false" style="color:#FFA500">{{selectedChapter
+                        | titlecase}}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown" [routerLink]="[routingUrl, selectedCode]">
+                        <li *ngFor="let chapter of chapters">
+                            <a class="dropdown-item" [ngClass]="{'chapter-active' : selectedChapter == chapter.chapterName}" (click)="dropdownChapterData(chapter)">
+                                {{chapter.chapterName | titlecase}}</a>
+                        </li>
+                    </div>
+
+                    <a *ngIf="viewOverview" class="nav-item nav-link text" id="overview" data-toggle="tab" role="tab" (click)="setUpReportFlag('overview')" aria-controls="nav-overview" aria-selected="false" [routerLink]="[routingUrl,selectedCode]" routerLinkActive="active">Overview</a>
+
+                    <a *ngIf="viewMemberships" class="nav-item nav-link text" id="membership" data-toggle="tab" role="tab" (click)="setUpReportFlag('membership')" aria-controls="nav-membership" aria-selected="false" [routerLink]="['./membership',selectedCode]" routerLinkActive="active">Membership</a>
+
+                    <a *ngIf="viewDetailMetrics" class="nav-item nav-link text" id="metrics" data-toggle="tab" role="tab" (click)="setUpReportFlag('metrics')" aria-controls="nav-metrics" aria-selected="false" [routerLink]="['./metrics',selectedCode]" routerLinkActive="active">Detail
+                        Metrics
+                    </a>
+
+                    <a *ngIf="viewRevenue" class="nav-item nav-link text" id="revenue" data-toggle="tab" role="tab" (click)="setUpReportFlag('revenue')" aria-controls="nav-revenue" aria-selected="false" [routerLink]="['./revenue',selectedCode]" routerLinkActive="active">Revenue</a>
+
+                    <a *ngIf="viewBoardMember" class="nav-item nav-link text" id="boardMembers" data-toggle="tab" role="tab" (click)="setUpReportFlag('boardMembers')" aria-controls="nav-metrics" aria-selected="false" [routerLink]="['./boardMembers',selectedCode]" routerLinkActive="active">Board
+                        Members
+                    </a>
+
+                    <a *ngIf="viewSocialMedia" class="nav-item nav-link text" id="social" data-toggle="tab" role="tab" (click)="setUpReportFlag('social')" aria-controls="nav-social" aria-selected="false" [routerLink]="['./social',selectedCode]" routerLinkActive="active">Social
+                        Media
+                    </a>
+
+                    <a *ngIf="viewSponsor" class="nav-item nav-link text" id="sponsorship" data-toggle="tab" role="tab" (click)="setUpReportFlag('sponsorship')" aria-controls="nav-sponsorship" aria-selected="false" [routerLink]="['./sponsorship',selectedCode]" routerLinkActive="active">Sponsorship Reports</a>
+
+                    <a *ngIf="viewOpportunity" class="nav-item nav-link text" id="sponsorship" data-toggle="tab" role="tab" (click)="setUpReportFlag('sponsorship')" aria-controls="nav-sponsorship" aria-selected="false" [routerLink]="['./pipeline',selectedCode]" routerLinkActive="active">Sponsorship Pipleine</a>
+
+
+                    <!-- <span class="rdate-selector" style="float: right important;" *ngIf="showDropDown">
+                        M Reporting Date :&nbsp;
+                        <select id="srDate" class="dt-list" (change)="reportingDateSelection($event.target.value)">
+                            <option *ngFor="let dt of reportingDates" [value]="dt.code"
+                                [attr.selected]="selectedRDate.code == dt.code ? true : null">
+                                <span style="padding:5px;">{{dt.label | date }} </span>
+                    </option>
+                    </select>
+                    </span> -->
+                </div>
+            </nav>
+            <div class="scrollbar" id="fluid-scroll">
+                <div class="force-overflow">
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

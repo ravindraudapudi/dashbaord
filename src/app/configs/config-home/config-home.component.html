@@ -1,0 +1,37 @@
+<div class="tab-content" id="nav-tabContent">
+  <div class="container-fluid">
+    <div class="card-tab">
+      <nav id="submenu">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+
+          <a *ngIf="createChapter" class="nav-item nav-link text" id="total-membership" data-toggle="tab" role="tab"
+            aria-controls="nav-total-membership" aria-selected="true" [routerLink]="['chapters']"
+            routerLinkActive="active">Chapters</a>
+
+          <a *ngIf="setFy" class="nav-item nav-link text" id="paid-membership" data-toggle="tab" role="tab"
+            aria-controls="nav-paid-membership" aria-selected="false" [routerLink]="['fydata']"
+            routerLinkActive="active">FY Data</a>
+
+          <a *ngIf="setGoal" class="nav-item nav-link text" id="sponsored-membership" data-toggle="tab" role="tab"
+            aria-controls="nav-sponsored-membership" aria-selected="false" [routerLink]="['goals']"
+            routerLinkActive="active">Goals</a>
+
+          <a *ngIf="createUser" class="nav-item nav-link text" id="membership-revenue" data-toggle="tab" role="tab"
+            aria-controls="nav-membership-revenue" aria-selected="false" [routerLink]="['usermanagement','user']"
+            routerLinkActive="active">User Management</a>
+
+
+          <a *ngIf="setUpPipeline" class="nav-item nav-link text" id="sponsored-pipeline" data-toggle="tab" role="tab"
+            aria-controls="nav-sponsored-membership" aria-selected="false" [routerLink]="['pipeline']"
+            routerLinkActive="active">Pipeline</a>
+
+        </div>
+      </nav>
+      <div class="scrollbar" id="fluid-scroll">
+        <div class="force-overflow px-3" style="margin-top: 0.2rem">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

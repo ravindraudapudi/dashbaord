@@ -1,0 +1,19 @@
+.card-icon-padding {
+     padding: 4px !important;
+}
+
+.card .card-body {
+    padding: 0px!important;
+    position: relative!important;
+    text-align: -webkit-center;
+}
+
+.card .card-body .stats {
+    text-align: left;
+}
+
+.row {
+    /* justify-content: center; */
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
