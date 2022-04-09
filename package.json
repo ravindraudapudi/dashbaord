@@ -39,7 +39,7 @@
     "file-saver": "^2.0.0",
     "font-awesome": "^4.7.0",
     "html2canvas": "^1.0.0-alpha.12",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "ng-circle-progress": "^1.4.0",
     "ng2-nvd3": "^2.0.0",
     "ngx-moment": "^3.4.0",
